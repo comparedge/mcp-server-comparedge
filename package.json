@@ -1,0 +1,23 @@
+{
+  "name": "@comparedge/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for SaaS pricing data from ComparEdge",
+  "main": "index.js",
+  "bin": {
+    "mcp-server-comparedge": "./index.js"
+  },
+  "type": "module",
+  "keywords": ["mcp", "saas", "pricing", "comparedge", "claude", "ai"],
+  "license": "MIT",
+  "homepage": "https://comparedge.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/comparedge/mcp-server-comparedge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/comparedge/mcp-server-comparedge/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
