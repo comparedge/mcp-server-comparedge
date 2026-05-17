@@ -1,13 +1,23 @@
 {
   "name": "@comparedge/mcp-server",
-  "version": "1.0.0",
-  "description": "MCP server for SaaS pricing data from ComparEdge",
+  "version": "2.0.0",
+  "description": "MCP server providing structured access to ComparEdge software intelligence: pricing plans, G2/Capterra ratings, feature comparisons, and category rankings for 508+ SaaS, AI, and security tools.",
   "main": "index.js",
   "bin": {
     "mcp-server-comparedge": "./index.js"
   },
   "type": "module",
-  "keywords": ["mcp", "saas", "pricing", "comparedge", "claude", "ai"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "saas",
+    "pricing",
+    "comparedge",
+    "claude",
+    "ai",
+    "software-comparison"
+  ],
+  "author": "ComparEdge <hello@comparedge.com>",
   "license": "MIT",
   "homepage": "https://comparedge.com",
   "repository": {
