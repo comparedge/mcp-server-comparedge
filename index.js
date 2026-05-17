@@ -1,204 +1,479 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server
- * Exposes SaaS pricing data from comparedge.com as MCP tools for Claude and other AI assistants.
- * Protocol: JSON-RPC 2.0 over stdin/stdout (MCP spec 2024-11-05)
- * Zero external dependencies — pure Node.js built-ins only.
+ * ComparEdge MCP Server v2.0.0
+ * MCP protocol version 2024-11-05
+ * JSON-RPC 2.0 over stdio, zero npm dependencies
  */
 
 import { createInterface } from 'readline';
-import https from 'https';
 
 const API_BASE = 'https://comparedge-api.up.railway.app/api/v1';
+const TOOLS_JSON = 'https://comparedge.com/llms-tools.json';
+const PRICING_JSON = 'https://comparedge.com/llms-pricing.json';
+const SITE_BASE = 'https://comparedge.com';
 
-function fetchJSON(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, { headers: { Accept: 'application/json' } }, res => {
-      let d = '';
-      res.on('data', c => d += c);
-      res.on('end', () => {
-        try { resolve(JSON.parse(d)); } catch (e) { reject(e); }
-      });
-    }).on('error', reject);
-  });
-}
-
-const TOOLS = [
-  {
-    name: "search_products",
-    description: "Search SaaS products by name or keyword. Returns matching products with pricing and ratings from comparedge.com",
-    inputSchema: {
-      type: "object",
-      properties: {
-        query: { type: "string", description: "Search query (product name or keyword)" },
-        limit: { type: "number", description: "Max results (default 5)", default: 5 }
-      },
-      required: ["query"]
-    }
-  },
-  {
-    name: "get_product",
-    description: "Get detailed info about a specific SaaS product including all pricing plans, features, and ratings",
-    inputSchema: {
-      type: "object",
-      properties: {
-        slug: { type: "string", description: "Product slug (e.g., 'notion', 'slack', 'figma')" }
-      },
-      required: ["slug"]
-    }
-  },
-  {
-    name: "compare_products",
-    description: "Compare two SaaS products side by side on pricing, features, and ratings",
-    inputSchema: {
-      type: "object",
-      properties: {
-        product1: { type: "string", description: "First product slug" },
-        product2: { type: "string", description: "Second product slug" }
-      },
-      required: ["product1", "product2"]
-    }
-  },
-  {
-    name: "list_category",
-    description: "List all SaaS products in a category with pricing overview",
-    inputSchema: {
-      type: "object",
-      properties: {
-        category: { type: "string", description: "Category slug (e.g., 'crm', 'llm', 'project-management', 'email-marketing')" },
-        sort_by: { type: "string", description: "Sort by: price, rating, name", default: "rating" }
-      },
-      required: ["category"]
-    }
-  },
-  {
-    name: "find_free_alternatives",
-    description: "Find SaaS products with free tiers in a given category",
-    inputSchema: {
-      type: "object",
-      properties: {
-        category: { type: "string", description: "Category slug" }
-      },
-      required: ["category"]
-    }
-  }
+const CATEGORIES = [
+  { slug: 'ai-tools', name: 'AI Tools' },
+  { slug: 'llm', name: 'Large Language Models' },
+  { slug: 'ai-coding', name: 'AI Coding' },
+  { slug: 'ai-writing', name: 'AI Writing' },
+  { slug: 'ai-image', name: 'AI Image Generation' },
+  { slug: 'ai-video', name: 'AI Video' },
+  { slug: 'ai-audio', name: 'AI Audio' },
+  { slug: 'project-management', name: 'Project Management' },
+  { slug: 'crm', name: 'CRM' },
+  { slug: 'email-marketing', name: 'Email Marketing' },
+  { slug: 'customer-support', name: 'Customer Support' },
+  { slug: 'analytics', name: 'Analytics' },
+  { slug: 'design-tools', name: 'Design Tools' },
+  { slug: 'video-conferencing', name: 'Video Conferencing' },
+  { slug: 'cloud-hosting', name: 'Cloud Hosting' },
+  { slug: 'devops', name: 'DevOps' },
+  { slug: 'security', name: 'Security' },
+  { slug: 'cloud-security', name: 'Cloud Security' },
+  { slug: 'iam', name: 'Identity and Access Management' },
+  { slug: 'siem', name: 'SIEM' },
+  { slug: 'edr', name: 'Endpoint Detection and Response' },
+  { slug: 'vulnerability-management', name: 'Vulnerability Management' },
+  { slug: 'compliance', name: 'Compliance' },
+  { slug: 'erp', name: 'ERP' },
+  { slug: 'hr-tools', name: 'HR Tools' },
+  { slug: 'accounting', name: 'Accounting' },
+  { slug: 'legal-tech', name: 'Legal Tech' },
+  { slug: 'data-visualization', name: 'Data Visualization' },
+  { slug: 'bi-tools', name: 'Business Intelligence' },
+  { slug: 'database', name: 'Database' },
+  { slug: 'vector-db', name: 'Vector Database' },
+  { slug: 'api-management', name: 'API Management' },
+  { slug: 'payment-processing', name: 'Payment Processing' },
+  { slug: 'e-commerce', name: 'E-Commerce' },
+  { slug: 'email-infrastructure', name: 'Email Infrastructure' },
+  { slug: 'monitoring', name: 'Monitoring' },
+  { slug: 'logging', name: 'Logging' },
+  { slug: 'feature-flags', name: 'Feature Flags' },
+  { slug: 'a-b-testing', name: 'A/B Testing' },
+  { slug: 'crypto-exchanges', name: 'Crypto Exchanges' },
+  { slug: 'crypto-trading-bots', name: 'Crypto Trading Bots' },
+  { slug: 'defi-tools', name: 'DeFi Tools' },
+  { slug: 'dex', name: 'Decentralized Exchanges' },
+  { slug: 'nft-tools', name: 'NFT Tools' },
+  { slug: 'vpn', name: 'VPN' },
+  { slug: 'password-managers', name: 'Password Managers' },
 ];
 
-async function handleTool(name, args) {
-  switch (name) {
-    case "search_products": {
-      const data = await fetchJSON(`${API_BASE}/search?q=${encodeURIComponent(args.query)}&limit=${args.limit || 5}`);
-      const products = data.products || data.results || [];
-      if (!products.length) return 'No products found for that query.';
-      return products.map(p => {
-        const pricing = p.pricing || {};
-        const plans = pricing.plans || [];
-        const paid = plans.filter(pl => pl.price > 0);
-        const starting = paid.length ? Math.min(...paid.map(pl => pl.price)) : null;
-        return `${p.name} (${p.category}) - ${starting ? '$' + starting + '/mo' : 'Free'} - G2: ${(p.rating || {}).g2 || 'N/A'} - https://comparedge.com/tools/${p.slug}`;
-      }).join('\n');
-    }
+const TOOL_DEFINITIONS = [
+  {
+    name: 'search_tools',
+    description: 'Search 508+ software products by name or keyword. Returns name, category, rating, free plan availability, starting price, and ComparEdge URL.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Search query string (product name, keyword, or use case)' },
+        limit: { type: 'number', description: 'Maximum number of results to return (default: 5)' },
+      },
+      required: ['query'],
+    },
+  },
+  {
+    name: 'get_tool',
+    description: 'Retrieve full details for a specific software tool by its slug. Returns name, description, category, rating, all pricing plans, features, and ComparEdge URL.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        slug: { type: 'string', description: 'Tool slug identifier (e.g., "openai", "notion", "github-copilot")' },
+      },
+      required: ['slug'],
+    },
+  },
+  {
+    name: 'compare_tools',
+    description: 'Side-by-side structured comparison of two software products. Returns pricing, features, ratings, and key differences.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        tool1: { type: 'string', description: 'Slug of the first tool to compare' },
+        tool2: { type: 'string', description: 'Slug of the second tool to compare' },
+      },
+      required: ['tool1', 'tool2'],
+    },
+  },
+  {
+    name: 'list_category',
+    description: 'Browse all tools in a specific software category with pricing overview. Supports sorting and free-only filtering.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        category: { type: 'string', description: 'Category slug (e.g., "llm", "ai-coding", "crm")' },
+        sort_by: { type: 'string', description: 'Sort field: "rating" (default) or "startingPrice"' },
+        free_only: { type: 'boolean', description: 'If true, return only tools with a free plan (default: false)' },
+      },
+      required: ['category'],
+    },
+  },
+  {
+    name: 'get_alternatives',
+    description: 'Find top alternatives to a given software tool within the same category, sorted by rating.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        slug: { type: 'string', description: 'Slug of the tool to find alternatives for' },
+        limit: { type: 'number', description: 'Maximum number of alternatives to return (default: 5)' },
+      },
+      required: ['slug'],
+    },
+  },
+  {
+    name: 'get_pricing',
+    description: 'Retrieve complete verified pricing breakdown for a specific tool, including all plans, prices, highlights, and token pricing where applicable.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        slug: { type: 'string', description: 'Tool slug identifier' },
+      },
+      required: ['slug'],
+    },
+  },
+  {
+    name: 'get_leaderboard',
+    description: 'Get top-rated software tools by category, ranked by aggregated G2 and Capterra scores.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        category: { type: 'string', description: 'Category slug to filter by, or "all" for overall leaderboard (default: "all")' },
+        limit: { type: 'number', description: 'Number of top tools to return (default: 10)' },
+      },
+    },
+  },
+  {
+    name: 'list_categories',
+    description: 'List all 45 supported software categories with their slugs and display names.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+];
 
-    case "get_product": {
-      const data = await fetchJSON(`${API_BASE}/products?limit=500`);
-      const product = (data.products || []).find(p => p.slug === args.slug);
-      if (!product) return `Product "${args.slug}" not found. Try searching with search_products.`;
-      const pricing = product.pricing || {};
-      const plans = (pricing.plans || []).map(pl =>
-        `  ${pl.name}: ${pl.price ? '$' + pl.price + '/' + (pl.period || 'mo') : 'Free'}`
-      ).join('\n');
-      return [
-        `${product.name}`,
-        `Category: ${product.category}`,
-        `Description: ${product.description || 'N/A'}`,
-        `Free tier: ${pricing.free ? 'Yes' : 'No'}`,
-        `G2 Rating: ${(product.rating || {}).g2 || 'N/A'}`,
-        `Plans:\n${plans || '  N/A'}`,
-        `More: https://comparedge.com/tools/${product.slug}`
-      ].join('\n');
-    }
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} fetching ${url}`);
+  }
+  return res.json();
+}
 
-    case "compare_products": {
-      const data = await fetchJSON(`${API_BASE}/compare/${args.product1}/${args.product2}`);
-      if (data.error) return `Comparison not available. Check slugs: ${args.product1}, ${args.product2}`;
-      return JSON.stringify(data, null, 2);
-    }
+function toolURL(slug) {
+  return `${SITE_BASE}/tools/${slug}`;
+}
 
-    case "list_category": {
-      const data = await fetchJSON(`${API_BASE}/products?category=${encodeURIComponent(args.category)}&limit=50`);
-      const products = data.products || [];
-      if (!products.length) return `No products found in category "${args.category}".`;
-      const lines = products.map(p => {
-        const pricing = p.pricing || {};
-        const plans = pricing.plans || [];
-        const paid = plans.filter(pl => pl.price > 0);
-        const starting = paid.length ? Math.min(...paid.map(pl => pl.price)) : null;
-        return `${p.name}: ${starting ? '$' + starting + '/mo' : 'Free only'} | Free tier: ${pricing.free ? 'Yes' : 'No'} | G2: ${(p.rating || {}).g2 || '-'}`;
+function formatPrice(price) {
+  if (price === null || price === undefined) return 'N/A';
+  if (price === 0) return 'Free';
+  return `$${price}/mo`;
+}
+
+// Tool handlers
+
+async function searchTools(args) {
+  const { query, limit = 5 } = args;
+  const data = await fetchJSON(`${API_BASE}/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+  const results = Array.isArray(data) ? data : (data.results || data.data || []);
+  if (results.length === 0) {
+    return `No results found for "${query}".`;
+  }
+  const lines = results.map((t, i) => {
+    const rating = t.rating ? `${t.rating}/5` : 'N/A';
+    const free = t.freePlan ? 'Yes' : 'No';
+    const price = t.startingPrice !== undefined ? formatPrice(t.startingPrice) : 'N/A';
+    return [
+      `${i + 1}. ${t.name} (${t.slug || ''})`,
+      `   Category: ${t.categoryName || t.category || 'N/A'}`,
+      `   Rating: ${rating} | Free plan: ${free} | Starting price: ${price}`,
+      `   URL: ${toolURL(t.slug)}`,
+    ].join('\n');
+  });
+  return `Search results for "${query}" (${results.length} found):\n\n${lines.join('\n\n')}`;
+}
+
+async function getTool(args) {
+  const { slug } = args;
+  const data = await fetchJSON(`${API_BASE}/products/${slug}`);
+  const t = data.data || data;
+  const lines = [
+    `Name: ${t.name}`,
+    `Slug: ${t.slug || slug}`,
+    `Category: ${t.categoryName || t.category || 'N/A'}`,
+    `Description: ${t.description || 'N/A'}`,
+    `Rating: ${t.rating ? `${t.rating}/5` : 'N/A'}`,
+    `Free plan: ${t.freePlan ? 'Yes' : 'No'}`,
+    `Starting price: ${t.startingPrice !== undefined ? formatPrice(t.startingPrice) : 'N/A'}`,
+  ];
+  if (t.plans && t.plans.length > 0) {
+    lines.push('\nPricing plans:');
+    t.plans.forEach(p => {
+      lines.push(`  - ${p.name}: ${p.price !== undefined ? formatPrice(p.price) : 'N/A'}${p.highlights ? ` | ${Array.isArray(p.highlights) ? p.highlights.join(', ') : p.highlights}` : ''}`);
+    });
+  }
+  if (t.features && t.features.length > 0) {
+    lines.push('\nKey features:');
+    t.features.slice(0, 10).forEach(f => lines.push(`  - ${f}`));
+  }
+  lines.push(`\nComparEdge URL: ${toolURL(slug)}`);
+  return lines.join('\n');
+}
+
+async function compareTools(args) {
+  const { tool1, tool2 } = args;
+  let data;
+  try {
+    data = await fetchJSON(`${API_BASE}/compare/${tool1}/${tool2}`);
+  } catch (_) {
+    data = null;
+  }
+
+  if (data && (data.data || data.comparison)) {
+    const c = data.data || data.comparison || data;
+    return formatComparisonData(c, tool1, tool2);
+  }
+
+  // Fallback: fetch both individually
+  const [t1, t2] = await Promise.all([
+    fetchJSON(`${API_BASE}/products/${tool1}`).then(d => d.data || d),
+    fetchJSON(`${API_BASE}/products/${tool2}`).then(d => d.data || d),
+  ]);
+
+  const lines = [
+    `Comparison: ${t1.name} vs ${t2.name}`,
+    '',
+    `${'Field'.padEnd(22)} ${'  ' + t1.name.slice(0, 20).padEnd(22)} ${t2.name.slice(0, 20)}`,
+    '-'.repeat(70),
+    fmtRow('Category', t1.categoryName || t1.category, t2.categoryName || t2.category),
+    fmtRow('Rating', t1.rating ? `${t1.rating}/5` : 'N/A', t2.rating ? `${t2.rating}/5` : 'N/A'),
+    fmtRow('Free plan', t1.freePlan ? 'Yes' : 'No', t2.freePlan ? 'Yes' : 'No'),
+    fmtRow('Starting price', formatPrice(t1.startingPrice), formatPrice(t2.startingPrice)),
+    '',
+    `${t1.name} URL: ${toolURL(tool1)}`,
+    `${t2.name} URL: ${toolURL(tool2)}`,
+  ];
+
+  if (t1.plans && t1.plans.length > 0) {
+    lines.push(`\n${t1.name} plans:`);
+    t1.plans.forEach(p => lines.push(`  - ${p.name}: ${formatPrice(p.price)}`));
+  }
+  if (t2.plans && t2.plans.length > 0) {
+    lines.push(`\n${t2.name} plans:`);
+    t2.plans.forEach(p => lines.push(`  - ${p.name}: ${formatPrice(p.price)}`));
+  }
+
+  return lines.join('\n');
+}
+
+function fmtRow(label, v1, v2) {
+  return `${label.padEnd(22)} ${String(v1 ?? 'N/A').slice(0, 22).padEnd(22)} ${String(v2 ?? 'N/A').slice(0, 22)}`;
+}
+
+function formatComparisonData(c, slug1, slug2) {
+  const lines = [`Comparison: ${c.tool1?.name || slug1} vs ${c.tool2?.name || slug2}`, ''];
+  const t1 = c.tool1 || {};
+  const t2 = c.tool2 || {};
+  lines.push(fmtRow('Field', t1.name || slug1, t2.name || slug2));
+  lines.push('-'.repeat(70));
+  lines.push(fmtRow('Category', t1.categoryName || t1.category, t2.categoryName || t2.category));
+  lines.push(fmtRow('Rating', t1.rating ? `${t1.rating}/5` : 'N/A', t2.rating ? `${t2.rating}/5` : 'N/A'));
+  lines.push(fmtRow('Free plan', t1.freePlan ? 'Yes' : 'No', t2.freePlan ? 'Yes' : 'No'));
+  lines.push(fmtRow('Starting price', formatPrice(t1.startingPrice), formatPrice(t2.startingPrice)));
+  if (c.verdict) lines.push(`\nVerdict: ${c.verdict}`);
+  lines.push(`\n${t1.name || slug1} URL: ${toolURL(slug1)}`);
+  lines.push(`${t2.name || slug2} URL: ${toolURL(slug2)}`);
+  return lines.join('\n');
+}
+
+async function listCategory(args) {
+  const { category, sort_by = 'rating', free_only = false } = args;
+  const allTools = await fetchJSON(TOOLS_JSON);
+  let filtered = allTools.filter(t => t.category === category || t.categoryName === category);
+  if (filtered.length === 0) {
+    return `No tools found for category "${category}". Use list_categories to see available category slugs.`;
+  }
+  if (free_only) {
+    filtered = filtered.filter(t => t.freePlan);
+  }
+  if (sort_by === 'startingPrice') {
+    filtered.sort((a, b) => (a.startingPrice ?? Infinity) - (b.startingPrice ?? Infinity));
+  } else {
+    filtered.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+  }
+  const header = `Category: ${filtered[0]?.categoryName || category} (${filtered.length} tools${free_only ? ', free only' : ''}, sorted by ${sort_by})`;
+  const lines = filtered.map((t, i) => {
+    return `${i + 1}. ${t.name} | Rating: ${t.rating ?? 'N/A'}/5 | Free: ${t.freePlan ? 'Yes' : 'No'} | Price: ${formatPrice(t.startingPrice)} | ${toolURL(t.slug)}`;
+  });
+  return `${header}\n\n${lines.join('\n')}`;
+}
+
+async function getAlternatives(args) {
+  const { slug, limit = 5 } = args;
+  const allTools = await fetchJSON(TOOLS_JSON);
+  const target = allTools.find(t => t.slug === slug);
+  if (!target) {
+    return `Tool with slug "${slug}" not found.`;
+  }
+  const alternatives = allTools
+    .filter(t => t.slug !== slug && t.category === target.category)
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+    .slice(0, limit);
+  if (alternatives.length === 0) {
+    return `No alternatives found for "${target.name}" in category "${target.categoryName || target.category}".`;
+  }
+  const lines = alternatives.map((t, i) => {
+    return `${i + 1}. ${t.name} | Rating: ${t.rating ?? 'N/A'}/5 | Free: ${t.freePlan ? 'Yes' : 'No'} | Price: ${formatPrice(t.startingPrice)} | ${toolURL(t.slug)}`;
+  });
+  return `Top alternatives to ${target.name} in ${target.categoryName || target.category}:\n\n${lines.join('\n')}`;
+}
+
+async function getPricing(args) {
+  const { slug } = args;
+  const allPricing = await fetchJSON(PRICING_JSON);
+  const entry = Array.isArray(allPricing)
+    ? allPricing.find(t => t.slug === slug)
+    : allPricing[slug];
+  if (!entry) {
+    return `Pricing data not found for "${slug}".`;
+  }
+  const lines = [
+    `Pricing: ${entry.name || slug}`,
+    `Free plan: ${entry.freePlan ? 'Yes' : 'No'}`,
+    `Verified at: ${entry.verifiedAt || 'N/A'}`,
+  ];
+  if (entry.plans && entry.plans.length > 0) {
+    lines.push('\nPlans:');
+    entry.plans.forEach(p => {
+      const price = p.price !== undefined ? formatPrice(p.price) : 'N/A';
+      lines.push(`  ${p.name}: ${price}`);
+      if (p.highlights && p.highlights.length > 0) {
+        const h = Array.isArray(p.highlights) ? p.highlights : [p.highlights];
+        h.forEach(hl => lines.push(`    - ${hl}`));
+      }
+    });
+  }
+  if (entry.tokenPricing) {
+    lines.push('\nToken pricing:');
+    if (typeof entry.tokenPricing === 'object') {
+      Object.entries(entry.tokenPricing).forEach(([k, v]) => {
+        lines.push(`  ${k}: ${v}`);
       });
-      return lines.join('\n') + `\n\nFull comparison: https://comparedge.com/category/${args.category}`;
+    } else {
+      lines.push(`  ${entry.tokenPricing}`);
     }
+  }
+  lines.push(`\nComparEdge URL: ${toolURL(slug)}`);
+  return lines.join('\n');
+}
 
-    case "find_free_alternatives": {
-      const data = await fetchJSON(`${API_BASE}/products?category=${encodeURIComponent(args.category)}&limit=50`);
-      const free = (data.products || []).filter(p => (p.pricing || {}).free);
-      if (!free.length) return `No free-tier products found in category "${args.category}".`;
-      return free.map(p =>
-        `${p.name} - G2: ${(p.rating || {}).g2 || '-'} - https://comparedge.com/tools/${p.slug}`
-      ).join('\n');
-    }
+async function getLeaderboard(args) {
+  const { category = 'all', limit = 10 } = args;
+  const allTools = await fetchJSON(TOOLS_JSON);
+  let filtered = category === 'all'
+    ? allTools
+    : allTools.filter(t => t.category === category);
+  if (filtered.length === 0) {
+    return `No tools found for category "${category}".`;
+  }
+  filtered.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+  const top = filtered.slice(0, limit);
+  const header = category === 'all'
+    ? `Overall leaderboard (top ${top.length} by rating):`
+    : `Leaderboard for ${top[0]?.categoryName || category} (top ${top.length} by rating):`;
+  const lines = top.map((t, i) => {
+    return `${String(i + 1).padStart(2)}. ${t.name.padEnd(30)} Rating: ${String(t.rating ?? 'N/A').padEnd(6)} Free: ${t.freePlan ? 'Yes' : 'No'} | ${toolURL(t.slug)}`;
+  });
+  return `${header}\n\n${lines.join('\n')}`;
+}
 
-    default:
-      return `Unknown tool: ${name}`;
+function listCategoriesFn() {
+  const lines = CATEGORIES.map((c, i) => {
+    return `${String(i + 1).padStart(2)}. ${c.name.padEnd(35)} (${c.slug})`;
+  });
+  return `Supported categories (${CATEGORIES.length} total):\n\n${lines.join('\n')}`;
+}
+
+// Dispatch tool call
+async function callTool(name, args) {
+  switch (name) {
+    case 'search_tools': return searchTools(args);
+    case 'get_tool': return getTool(args);
+    case 'compare_tools': return compareTools(args);
+    case 'list_category': return listCategory(args);
+    case 'get_alternatives': return getAlternatives(args);
+    case 'get_pricing': return getPricing(args);
+    case 'get_leaderboard': return getLeaderboard(args);
+    case 'list_categories': return listCategoriesFn();
+    default: throw new Error(`Unknown tool: ${name}`);
   }
 }
 
-// ── JSON-RPC 2.0 transport (MCP over stdio) ───────────────────────────────────
-
-const rl = createInterface({ input: process.stdin, terminal: false });
-let buffer = '';
-
-function send(response) {
-  const msg = JSON.stringify(response);
-  process.stdout.write(`Content-Length: ${Buffer.byteLength(msg, 'utf8')}\r\n\r\n${msg}`);
+// JSON-RPC 2.0 handler
+function makeResponse(id, result) {
+  return JSON.stringify({ jsonrpc: '2.0', id, result });
 }
 
-rl.on('line', async (line) => {
-  // MCP framing: skip Content-Length header lines, accumulate JSON body
-  if (line.startsWith('Content-Length:') || line.trim() === '') return;
-  buffer += line;
-  try {
-    const request = JSON.parse(buffer);
-    buffer = '';
+function makeError(id, code, message) {
+  return JSON.stringify({ jsonrpc: '2.0', id, error: { code, message } });
+}
 
-    if (request.method === 'initialize') {
-      send({
-        jsonrpc: '2.0',
-        id: request.id,
-        result: {
-          protocolVersion: '2024-11-05',
-          capabilities: { tools: {} },
-          serverInfo: { name: 'comparedge', version: '1.0.0' }
-        }
+async function handleRequest(req) {
+  const { id, method, params } = req;
+
+  if (method === 'initialize') {
+    return makeResponse(id, {
+      protocolVersion: '2024-11-05',
+      capabilities: { tools: {} },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.0.0' },
+    });
+  }
+
+  if (method === 'tools/list') {
+    return makeResponse(id, { tools: TOOL_DEFINITIONS });
+  }
+
+  if (method === 'tools/call') {
+    const { name, arguments: args } = params || {};
+    try {
+      const text = await callTool(name, args || {});
+      return makeResponse(id, {
+        content: [{ type: 'text', text }],
       });
-    } else if (request.method === 'tools/list') {
-      send({ jsonrpc: '2.0', id: request.id, result: { tools: TOOLS } });
-    } else if (request.method === 'tools/call') {
-      const { name, arguments: args } = request.params;
-      try {
-        const text = await handleTool(name, args || {});
-        send({ jsonrpc: '2.0', id: request.id, result: { content: [{ type: 'text', text }] } });
-      } catch (err) {
-        send({ jsonrpc: '2.0', id: request.id, error: { code: -32000, message: err.message } });
-      }
-    } else if (request.method === 'notifications/initialized') {
-      // Notification — no response
-    } else if (request.id !== undefined) {
-      send({ jsonrpc: '2.0', id: request.id, error: { code: -32601, message: `Method not found: ${request.method}` } });
+    } catch (err) {
+      return makeResponse(id, {
+        content: [{ type: 'text', text: `Error: ${err.message}` }],
+        isError: true,
+      });
     }
-  } catch (e) {
-    // Incomplete JSON — keep buffering; reset if buffer bloats
-    if (buffer.length > 100_000) buffer = '';
+  }
+
+  if (method === 'notifications/initialized') {
+    return null; // no response for notifications
+  }
+
+  return makeError(id, -32601, `Method not found: ${method}`);
+}
+
+// Main stdio loop
+const rl = createInterface({ input: process.stdin, terminal: false });
+
+rl.on('line', async (line) => {
+  const trimmed = line.trim();
+  if (!trimmed) return;
+  let req;
+  try {
+    req = JSON.parse(trimmed);
+  } catch (_) {
+    process.stdout.write(makeError(null, -32700, 'Parse error') + '\n');
+    return;
+  }
+  const response = await handleRequest(req);
+  if (response !== null) {
+    process.stdout.write(response + '\n');
   }
 });
 
-process.on('uncaughtException', () => {});
+rl.on('close', () => process.exit(0));
