@@ -1,5 +1,8 @@
 {
-  "$schema": "https://glama.ai/mcp/glama.schema.json",
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "maintainers": [
+    "imkemit-ops"
+  ],
   "name": "mcp-server-comparedge",
   "description": "Query verified pricing, independently aggregated ratings, feature comparisons, and category leaderboards for 508+ SaaS, AI, and security tools across 45 categories. Zero dependencies, no API key required.",
   "version": "2.1.4",
