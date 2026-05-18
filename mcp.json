@@ -1,0 +1,31 @@
+{
+  "name": "ComparEdge MCP Server",
+  "description": "Zero-dependency MCP server providing verified SaaS pricing, alternatives, and feature comparisons for 508+ tools across 45+ categories.",
+  "version": "2.1.8",
+  "type": "mcp",
+  "transport": "stdio",
+  "command": "npx",
+  "args": ["-y", "@comparedge/mcp-server"],
+  "tools": [
+    {
+      "name": "search_tools",
+      "description": "Search the ComparEdge database by product name, category, or keyword."
+    },
+    {
+      "name": "get_tool",
+      "description": "Retrieve the complete profile for a specific tool by its slug identifier."
+    },
+    {
+      "name": "get_pricing",
+      "description": "Retrieve verified pricing plans for a specific tool."
+    },
+    {
+      "name": "get_alternatives",
+      "description": "Find verified alternatives to a given tool within the same category."
+    }
+  ],
+  "homepage": "https://comparedge.com/mcp",
+  "repository": "https://github.com/comparedge/mcp-server-comparedge",
+  "license": "MIT",
+  "keywords": ["saas", "pricing", "mcp", "alternatives", "comparison"]
+}
