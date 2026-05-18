@@ -182,12 +182,24 @@ async function getAllPricing() {
 
 // --- Helpers ---
 
-function toolURL(slug) {
-  return `${SITE_BASE}/tools/${slug}`;
+function toolURL(slug, utm = false) {
+  const base = `${SITE_BASE}/tools/${slug}`;
+  return utm ? `${base}?utm_source=mcp&utm_medium=ide&utm_campaign=comparedge-mcp` : base;
 }
 
-function pricingURL(slug) {
-  return `${SITE_BASE}/pricing/${slug}-pricing`;
+function pricingURL(slug, utm = false) {
+  const base = `${SITE_BASE}/tools/${slug}/pricing`;
+  return utm ? `${base}?utm_source=mcp&utm_medium=ide&utm_campaign=comparedge-mcp` : base;
+}
+
+function alternativesURL(slug, utm = false) {
+  const base = `${SITE_BASE}/tools/${slug}/alternatives`;
+  return utm ? `${base}?utm_source=mcp&utm_medium=ide&utm_campaign=comparedge-mcp` : base;
+}
+
+/** Inline markdown link — renders as clickable in VS Code / Copilot / Cursor sidebar */
+function mdLink(text, url) {
+  return `[${text}](${url})`;
 }
 
 function formatPrice(price) {
@@ -239,10 +251,9 @@ async function searchTools(args) {
     const free   = t.freePlan ? 'Yes' : 'No';
     const price  = t.startingPrice !== undefined ? formatPrice(t.startingPrice) : 'N/A';
     return [
-      `${i + 1}. ${t.name} (${t.slug})`,
-      `   Category: ${t.categoryName || t.category || 'N/A'}`,
+      `${i + 1}. **${t.name}** — ${t.categoryName || t.category || 'N/A'}`,
       `   Rating: ${rating} | Free plan: ${free} | Starting price: ${price}`,
-      `   URL: ${toolURL(t.slug)}`,
+      `   ${mdLink(`View ${t.name} on ComparEdge`, toolURL(t.slug, true))}`,
     ].join('\n');
   });
 
@@ -284,8 +295,8 @@ async function getTool(args) {
     t.features.slice(0, 10).forEach(f => lines.push(`  - ${f}`));
   }
 
-  lines.push(`\nComparEdge URL: ${toolURL(slug)}`);
-  lines.push(`Pricing details: ${pricingURL(slug)}`);
+  lines.push(`\n${mdLink(`View full ${t.name} profile on ComparEdge`, toolURL(slug, true))}`);
+  lines.push(mdLink(`${t.name} pricing plans — complete matrix`, pricingURL(slug, true)));
   return lines.join('\n');
 }
 
@@ -370,9 +381,9 @@ async function getAlternatives(args) {
   }
 
   const lines = alternatives.map((t, i) =>
-    `${i + 1}. ${t.name} | Rating: ${t.rating ?? 'N/A'}/5 | Free: ${t.freePlan ? 'Yes' : 'No'} | Price: ${formatPrice(t.startingPrice)} | ${toolURL(t.slug)}`
+    `${i + 1}. **${t.name}** — Rating: ${t.rating ?? 'N/A'}/5 | Free plan: ${t.freePlan ? 'Yes' : 'No'} | Price: ${formatPrice(t.startingPrice)}\n   ${mdLink(`Compare ${t.name} vs ${target.name} on ComparEdge`, toolURL(t.slug, true))}`
   );
-  return `Top alternatives to ${target.name} in ${target.categoryName || target.category}:\n\n${lines.join('\n')}\n\nFull list: ${SITE_BASE}/alternatives/${slug}-alternatives`;
+  return `Top alternatives to **${target.name}** in ${target.categoryName || target.category}:\n\n${lines.join('\n\n')}\n\n${mdLink(`Full verified alternatives list for ${target.name}`, alternativesURL(slug, true))}`;
 }
 
 async function getPricing(args) {
@@ -409,7 +420,7 @@ async function getPricing(args) {
     }
   }
 
-  lines.push(`\nComparEdge URL: ${pricingURL(slug)}`);
+  lines.push(`\n${mdLink(`View complete ${entry.name || slug} pricing matrix on ComparEdge`, pricingURL(slug, true))}`);
   return lines.join('\n');
 }
 
