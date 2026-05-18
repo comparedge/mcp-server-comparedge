@@ -1,10 +1,23 @@
 name: comparedge
 displayName: ComparEdge Software Intelligence
-description: Query verified pricing, G2 ratings, feature comparisons, and category rankings for 508+ SaaS, AI, and security tools. No API key required.
+description: Query verified pricing, aggregated ratings, feature comparisons, and category rankings for 508+ SaaS, AI, and security tools. No API key required.
 homepage: https://comparedge.com
 license: MIT
 runtime: node
-version: "2.0.0"
+version: "2.1.9"
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+    required: []
+  commandFunction: |-
+    (config) => ({
+      command: "npx",
+      args: ["-y", "@comparedge/mcp-server@latest"]
+    })
+
 tools:
   - name: search_tools
     description: Search 508+ software products by name or keyword
@@ -19,6 +32,6 @@ tools:
   - name: get_pricing
     description: Complete pricing breakdown with verified plan data
   - name: get_leaderboard
-    description: Top-rated tools by category, ranked by G2 and Capterra scores
+    description: Top-rated tools by category, ranked by aggregated review scores
   - name: list_categories
     description: List all 45 supported software categories
