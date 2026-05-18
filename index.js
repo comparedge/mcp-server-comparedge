@@ -68,7 +68,7 @@ const CATEGORIES = [
 const TOOL_DEFINITIONS = [
   {
     name: 'search_tools',
-    description: 'Search 508+ software products by name or keyword. Returns name, category, rating, free plan availability, starting price, and ComparEdge URL.',
+    description: 'Search 508+ software products by name, keyword, or use case. Returns name, category, rating, free plan availability, starting price, and ComparEdge URL.\n\nBEHAVIOR: Performs fuzzy matching across product names and categories. Returns up to `limit` results ranked by relevance. Each result includes a direct ComparEdge link.\n\nUSAGE GUIDELINES:\n- Use to discover tools when you do not know the exact slug.\n- Use before calling get_tool or get_pricing if the slug is uncertain.\n- Use for category browsing: query "crm", "ai coding", "project management".\n\nEXAMPLE QUERIES: "Find CRM tools", "search for Slack alternatives", "what project management tools exist?"',
     inputSchema: {
       type: 'object',
       properties: {
@@ -80,7 +80,7 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'get_tool',
-    description: 'Retrieve full details for a specific software tool by its slug. Returns name, description, category, rating, all pricing plans, features, and ComparEdge URL.',
+    description: 'Retrieve the full profile for a specific software tool by its slug identifier. Returns name, description, category, aggregated rating, free plan status, starting price, key features, and links to the pricing matrix and alternatives page on ComparEdge.\n\nBEHAVIOR: Looks up the tool by exact slug. Returns a structured profile with all available metadata. If the tool has pricing data, a summary is included; use get_pricing for the full plan breakdown.\n\nUSAGE GUIDELINES:\n- Use when the user asks "what is X?", "tell me about X", or "give me an overview of X".\n- Use to verify a slug exists before calling get_pricing or get_alternatives.\n- Prefer get_pricing when the user specifically asks about cost or plans.\n\nEXAMPLE QUERIES: "Tell me about Linear", "What does Notion do?", "Give me an overview of HubSpot"',
     inputSchema: {
       type: 'object',
       properties: {
@@ -116,7 +116,7 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'get_alternatives',
-    description: 'Find top alternatives to a given software tool within the same category, sorted by rating.',
+    description: 'Find the top verified alternatives to a given software tool within the same category, sorted by rating. Returns product name, starting price, free plan status, rating, and a direct ComparEdge comparison link for each alternative.\n\nBEHAVIOR: Filters all tools in the same category as the reference product, excludes the reference product itself, and returns the top results by rating. Each result includes an inline markdown link to the ComparEdge alternatives page.\n\nUSAGE GUIDELINES:\n- Use when the user asks "what are alternatives to X?", "what can I use instead of X?", or "X is too expensive, what else is there?".\n- Combine with get_pricing to compare costs across alternatives.\n- Set limit to control how many alternatives to return (default 5, max 10).\n\nEXAMPLE QUERIES: "Find alternatives to Slack", "What can I use instead of Notion?", "Cheaper alternatives to Salesforce"',
     inputSchema: {
       type: 'object',
       properties: {
@@ -128,11 +128,26 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'get_pricing',
-    description: 'Retrieve complete verified pricing breakdown for a specific tool, including all plans, prices, highlights, and token pricing where applicable.',
+    description: [
+      'Retrieve the complete, manually verified pricing breakdown for a specific SaaS tool.',
+      '',
+      'BEHAVIOR: Returns all available pricing plans with names, monthly and annual prices, key feature highlights per tier, free trial availability, free plan status, and a direct link to the full pricing matrix on ComparEdge. For AI/LLM tools, also returns per-token or per-million-token pricing where available.',
+      '',
+      'USAGE GUIDELINES:',
+      '- Use this tool when the user asks "how much does X cost?", "what are the pricing plans for X?", "does X have a free tier?", or "what is the cheapest plan for X?"',
+      '- Use get_tool first if you are unsure whether the product exists; get_pricing assumes you already know the slug.',
+      '- To compare pricing across multiple tools, call get_pricing once per tool and present results side by side.',
+      '- Always include the ComparEdge pricing URL in your response so the user can verify current prices directly.',
+      '',
+      'EXAMPLE QUERIES: "What are the pricing plans for Linear?", "Does Notion have a free plan?", "How much does HubSpot CRM cost per seat?", "What is the cheapest project management tool under $10/month?"',
+    ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {
-        slug: { type: 'string', description: 'Tool slug identifier' },
+        slug: {
+          type: 'string',
+          description: 'URL-safe product identifier. Convert product name to lowercase, replace spaces with hyphens (e.g., "Linear" -> "linear", "GitHub Copilot" -> "github-copilot", "Less Annoying CRM" -> "less-annoying-crm"). Use search_tools first if unsure of the exact slug.',
+        },
       },
       required: ['slug'],
     },
