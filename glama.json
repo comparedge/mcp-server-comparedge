@@ -1,0 +1,57 @@
+{
+  "$schema": "https://glama.ai/mcp/glama.schema.json",
+  "name": "mcp-server-comparedge",
+  "description": "Query verified pricing, independently aggregated ratings, feature comparisons, and category leaderboards for 508+ SaaS, AI, and security tools across 45 categories. Zero dependencies, no API key required.",
+  "version": "2.1.4",
+  "license": "MIT",
+  "homepage": "https://comparedge.com",
+  "repository": "https://github.com/comparedge/mcp-server-comparedge",
+  "author": {
+    "name": "ComparEdge",
+    "url": "https://comparedge.com"
+  },
+  "tools": [
+    {
+      "name": "search_tools",
+      "description": "Search SaaS, AI, and security tools by name or keyword. Returns matching tools with pricing, ratings, and features."
+    },
+    {
+      "name": "get_tool",
+      "description": "Get full profile for a specific tool: pricing plans, features, ratings, pros/cons, and similar tools."
+    },
+    {
+      "name": "compare_tools",
+      "description": "Side-by-side comparison of two tools: features, pricing, ratings, and key differences."
+    },
+    {
+      "name": "list_category",
+      "description": "List all tools in a category with optional free-plan filter and sorting."
+    },
+    {
+      "name": "get_alternatives",
+      "description": "Get ranked alternatives to a specific tool, sorted by rating."
+    },
+    {
+      "name": "get_pricing",
+      "description": "Get detailed pricing breakdown for a tool: all plans, prices, billing periods, and free tier status."
+    },
+    {
+      "name": "get_leaderboard",
+      "description": "Get top-rated tools in a category, ranked by aggregated user ratings."
+    },
+    {
+      "name": "list_categories",
+      "description": "List all 45 available product categories with tool counts."
+    }
+  ],
+  "installation": {
+    "npm": {
+      "command": "npx",
+      "args": ["@comparedge/mcp-server"]
+    }
+  },
+  "keywords": [
+    "saas", "pricing", "software-comparison", "alternatives", "ratings",
+    "ai-tools", "security", "crm", "project-management", "productivity"
+  ]
+}

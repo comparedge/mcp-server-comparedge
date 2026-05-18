@@ -1,5 +1,9 @@
 # @comparedge/mcp-server
 
+[![mcp-server-comparedge MCP server](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge/badges/score.svg)](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge)
+[![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Model Context Protocol server providing structured access to the [ComparEdge](https://comparedge.com) software intelligence database. Covers verified pricing plans, independently aggregated ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
 
 ## Installation
