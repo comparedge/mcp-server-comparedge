@@ -1,7 +1,8 @@
 {
   "name": "@comparedge/mcp-server",
-  "version": "2.1.5",
-  "description": "MCP server providing structured access to ComparEdge software intelligence: pricing plans, G2/Capterra ratings, feature comparisons, and category rankings for 508+ SaaS, AI, and security tools.",
+  "version": "2.1.6",
+  "mcpName": "io.github.comparedge/mcp-server-comparedge",
+  "description": "MCP server for ComparEdge: verified pricing, alternatives, and feature comparisons for 508+ SaaS and AI tools.",
   "main": "index.js",
   "bin": {
     "mcp-server-comparedge": "./index.js"
@@ -12,10 +13,16 @@
     "model-context-protocol",
     "saas",
     "pricing",
+    "alternatives",
+    "software-comparison",
     "comparedge",
     "claude",
-    "ai",
-    "software-comparison"
+    "copilot",
+    "cursor",
+    "github-copilot",
+    "ai-tools",
+    "llm-tools",
+    "saas-pricing"
   ],
   "author": "ComparEdge <hello@comparedge.com>",
   "license": "MIT",
@@ -33,6 +40,7 @@
   "files": [
     "index.js",
     "README.md",
-    "glama.json"
+    "glama.json",
+    "server.json"
   ]
 }

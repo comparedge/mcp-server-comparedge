@@ -40,6 +40,38 @@ Create or edit `.cursor/mcp.json`:
 }
 ```
 
+### GitHub Copilot (VS Code)
+
+**Option A — User settings** (`settings.json`):
+
+```json
+{
+  "github.copilot.chat.mcp.servers": {
+    "comparedge": {
+      "command": "npx",
+      "args": ["-y", "@comparedge/mcp-server"],
+      "type": "stdio"
+    }
+  }
+}
+```
+
+**Option B — Project-level** (`.vscode/mcp.json`):
+
+```json
+{
+  "servers": {
+    "comparedge": {
+      "command": "npx",
+      "args": ["-y", "@comparedge/mcp-server"],
+      "type": "stdio"
+    }
+  }
+}
+```
+
+Once configured, ask Copilot Chat: `What are the best alternatives to Notion under $20/month?`
+
 ### Claude Code
 
 ```bash

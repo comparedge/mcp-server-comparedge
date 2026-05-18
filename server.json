@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.comparedge/mcp-server-comparedge",
+  "description": "Verified pricing plans, feature comparisons, and alternatives for 508+ SaaS and AI tools. Data is manually verified and refreshed from comparedge.com.",
+  "repository": {
+    "url": "https://github.com/comparedge/mcp-server-comparedge",
+    "source": "github"
+  },
+  "version": "2.1.6",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@comparedge/mcp-server",
+      "version": "2.1.6",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeHint": "node",
+      "installationNotes": "No API key required. Run with: npx @comparedge/mcp-server"
+    }
+  ]
+}
