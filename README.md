@@ -1,6 +1,6 @@
 # @comparedge/mcp-server
 
-Model Context Protocol server providing structured access to verified software intelligence from [ComparEdge](https://comparedge.com). Covers pricing plans, G2 and Capterra ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
+Model Context Protocol server providing structured access to the [ComparEdge](https://comparedge.com) software intelligence database. Covers verified pricing plans, independently aggregated ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
 
 ## Installation
 
@@ -116,13 +116,13 @@ Use `list_categories` to retrieve the full list with display names at runtime.
 
 ## Data Quality
 
-Pricing data is verified weekly against vendor pricing pages. Each product record includes a `verifiedAt` field indicating the date of the most recent verification. Ratings are aggregated from G2 and Capterra review platforms. The dataset covers 506 active products and 2 discontinued products (flagged).
+ComparEdge applies a multi-layer verification process to every product record. Pricing is verified directly against vendor pricing pages on a weekly rotation cycle. Each product includes a `verifiedAt` field reflecting the date of last verification. User ratings are aggregated independently across multiple review sources and normalized to a consistent 0-5 scale. The dataset covers 506 active products and 2 discontinued products (flagged as such).
 
 Data source: [ComparEdge Software Intelligence](https://comparedge.com) | [Pricing Guide](https://comparedge.com/pricing) | [Tool Directory](https://comparedge.com/tools) | [Alternatives](https://comparedge.com/alternatives) | [Comparisons](https://comparedge.com/compare)
 
 ## Browser Extension
 
-For users who prefer a browser-based interface, the [ComparEdge Advisor Chrome Extension](https://comparedge.com/extension) provides access to the same software intelligence data while browsing. It surfaces ratings, pricing summaries, and alternatives directly in the browser without requiring an AI assistant.
+For users who prefer a browser-based interface, the [ComparEdge Advisor Chrome Extension](https://comparedge.com/extension) surfaces ratings, pricing summaries, and alternatives directly in the browser without requiring an AI assistant.
 
 Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/extension/docs)
 
