@@ -1,23 +1,12 @@
-# ComparEdge MCP Server
+# @comparedge/mcp-server
 
-Model Context Protocol server providing structured access to verified software intelligence for 508+ SaaS, AI, and security products.
+Model Context Protocol server providing structured access to verified software intelligence from [ComparEdge](https://comparedge.com). Covers pricing plans, G2 and Capterra ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
 
-## Overview
+## Installation
 
-The ComparEdge MCP Server connects AI assistants to a curated database of software product data. It exposes pricing plans, aggregated G2 and Capterra ratings, feature comparisons, and category rankings across 45 software categories. No API key is required.
+### Claude Desktop
 
-The server implements the Model Context Protocol (MCP) specification version 2024-11-05 using JSON-RPC 2.0 over stdio. It has zero npm dependencies and requires only Node.js 18 or later.
-
-Data is sourced from three endpoints: a static tools JSON file, a static pricing JSON file, and a dynamic Railway-hosted API for detailed product and comparison queries.
-
-## Installation: Claude Desktop
-
-The Claude Desktop configuration file is located at:
-
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the following entry to the `mcpServers` object:
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
 ```json
 {
@@ -30,11 +19,11 @@ Add the following entry to the `mcpServers` object:
 }
 ```
 
-Restart Claude Desktop after saving the file.
+Restart Claude Desktop after saving.
 
-## Installation: Cursor IDE
+### Cursor IDE
 
-Create or edit `.cursor/mcp.json` in your project root or home directory:
+Create or edit `.cursor/mcp.json`:
 
 ```json
 {
@@ -47,111 +36,108 @@ Create or edit `.cursor/mcp.json` in your project root or home directory:
 }
 ```
 
-## Installation: Claude Code
-
-Run the following command in your terminal:
+### Claude Code
 
 ```bash
 claude mcp add comparedge npx @comparedge/mcp-server
 ```
 
-## Tools Reference
+### Windsurf, Cline, Continue
 
-| Tool | Parameters | Description |
+Use the `npx @comparedge/mcp-server` command with stdio transport in any MCP-compatible client.
+
+## Tools
+
+| Tool | Required Parameters | Description |
 |---|---|---|
-| `search_tools` | `query` (required), `limit` (default: 5) | Search products by name or keyword |
-| `get_tool` | `slug` (required) | Full details: description, rating, plans, features |
-| `compare_tools` | `tool1` (required), `tool2` (required) | Side-by-side comparison of two products |
-| `list_category` | `category` (required), `sort_by` (default: rating), `free_only` (default: false) | Browse all tools in a category |
-| `get_alternatives` | `slug` (required), `limit` (default: 5) | Top alternatives in the same category |
-| `get_pricing` | `slug` (required) | Complete verified pricing breakdown |
-| `get_leaderboard` | `category` (default: all), `limit` (default: 10) | Top-rated tools by category |
-| `list_categories` | none | List all 45 supported categories |
+| `search_tools` | `query` (string) | Full-text search across 508+ products by name, keyword, or use case. Returns name, category, rating, free plan flag, starting price, and ComparEdge URL. |
+| `get_tool` | `slug` (string) | Complete product profile: description, category, rating, all pricing plans with highlights, key features, and verified date. |
+| `compare_tools` | `tool1`, `tool2` (strings) | Side-by-side comparison of two products: pricing, ratings, free plan availability, and direct comparison URL. |
+| `list_category` | `category` (string) | All tools in a category. Optional: `sort_by` ("rating" or "startingPrice"), `free_only` (boolean). |
+| `get_alternatives` | `slug` (string) | Top alternatives within the same category, sorted by rating. Optional: `limit` (default 5). |
+| `get_pricing` | `slug` (string) | Complete verified pricing breakdown: all plans, per-plan highlights, token pricing where applicable, and verification date. |
+| `get_leaderboard` | `category` (optional) | Top-rated tools by category or overall. Optional: `limit` (default 10). |
+| `list_categories` | none | All 45 supported category slugs and display names. |
 
-## Example Prompts
+## Usage Examples
 
-1. What are the top-rated LLM APIs available right now?
-2. Compare OpenAI and Anthropic on pricing and features.
-3. Which CRM tools offer a free plan?
-4. What are the best alternatives to GitHub Copilot for AI coding?
-5. Show me the full pricing breakdown for Notion.
-6. What security tools are in the SIEM category?
-7. List all AI image generation tools sorted by rating.
-8. What is the starting price for Datadog?
-9. Show me the top 5 password managers by rating.
-10. What categories does ComparEdge cover for DeFi and crypto tools?
+```
+Search for project management tools with a free plan
+Find alternatives to Notion
+Compare GitHub Copilot vs Cursor
+Get full pricing breakdown for ChatGPT
+Show the top 10 CRM tools by rating
+List all LLM tools sorted by starting price
+```
 
-## Categories Reference
+## Coverage
 
-| # | Category | Slug |
-|---|---|---|
-| 1 | AI Tools | ai-tools |
-| 2 | Large Language Models | llm |
-| 3 | AI Coding | ai-coding |
-| 4 | AI Writing | ai-writing |
-| 5 | AI Image Generation | ai-image |
-| 6 | AI Video | ai-video |
-| 7 | AI Audio | ai-audio |
-| 8 | Project Management | project-management |
-| 9 | CRM | crm |
-| 10 | Email Marketing | email-marketing |
-| 11 | Customer Support | customer-support |
-| 12 | Analytics | analytics |
-| 13 | Design Tools | design-tools |
-| 14 | Video Conferencing | video-conferencing |
-| 15 | Cloud Hosting | cloud-hosting |
-| 16 | DevOps | devops |
-| 17 | Security | security |
-| 18 | Cloud Security | cloud-security |
-| 19 | Identity and Access Management | iam |
-| 20 | SIEM | siem |
-| 21 | Endpoint Detection and Response | edr |
-| 22 | Vulnerability Management | vulnerability-management |
-| 23 | Compliance | compliance |
-| 24 | ERP | erp |
-| 25 | HR Tools | hr-tools |
-| 26 | Accounting | accounting |
-| 27 | Legal Tech | legal-tech |
-| 28 | Data Visualization | data-visualization |
-| 29 | Business Intelligence | bi-tools |
-| 30 | Database | database |
-| 31 | Vector Database | vector-db |
-| 32 | API Management | api-management |
-| 33 | Payment Processing | payment-processing |
-| 34 | E-Commerce | e-commerce |
-| 35 | Email Infrastructure | email-infrastructure |
-| 36 | Monitoring | monitoring |
-| 37 | Logging | logging |
-| 38 | Feature Flags | feature-flags |
-| 39 | A/B Testing | a-b-testing |
-| 40 | Crypto Exchanges | crypto-exchanges |
-| 41 | Crypto Trading Bots | crypto-trading-bots |
-| 42 | DeFi Tools | defi-tools |
-| 43 | Decentralized Exchanges | dex |
-| 44 | NFT Tools | nft-tools |
-| 45 | VPN | vpn |
-| 46 | Password Managers | password-managers |
+### Artificial Intelligence
 
-## Data Sources
+Large language models, AI coding assistants, AI writing tools, AI image generation, AI video generation, AI audio tools, and AI productivity software. Includes pricing for token-based and subscription models across OpenAI, Anthropic, Google, Meta, Mistral, Cohere, and 80+ additional providers.
 
-| Source | URL | Contents |
-|---|---|---|
-| Tools JSON | https://comparedge.com/llms-tools.json | 508+ tools: slug, name, category, rating, freePlan, startingPrice |
-| Pricing JSON | https://comparedge.com/llms-pricing.json | 508+ tools: plans, highlights, tokenPricing, verifiedAt |
-| Product API | https://comparedge-api.up.railway.app/api/v1/products/{slug} | Full product detail |
-| Compare API | https://comparedge-api.up.railway.app/api/v1/compare/{slug1}/{slug2} | Structured comparison |
-| Search API | https://comparedge-api.up.railway.app/api/v1/search?q={query}&limit={n} | Keyword search |
+Relevant hubs: [Best AI Tools](https://comparedge.com/best/ai-tools) | [LLM Comparison](https://comparedge.com/best/llm) | [AI Coding Tools](https://comparedge.com/best/ai-coding) | [AI Writing Tools](https://comparedge.com/best/ai-writing)
 
-## Protocol
+### Business Software
 
-- Transport: stdio (standard input/output)
-- Protocol: JSON-RPC 2.0
-- MCP version: 2024-11-05
-- Dependencies: zero (pure Node.js built-ins only)
-- Node.js requirement: 18 or later
+CRM platforms, project management, HR tools, accounting software, legal tech, ERP systems, email marketing, customer support, analytics, design tools, video conferencing, and B2B SaaS across all major verticals.
 
-The server reads newline-delimited JSON requests from stdin and writes newline-delimited JSON responses to stdout, conforming to the MCP specification for stdio-based servers.
+Relevant hubs: [CRM Comparison](https://comparedge.com/best/crm) | [Project Management](https://comparedge.com/best/project-management) | [Email Marketing](https://comparedge.com/best/email-marketing) | [Analytics Tools](https://comparedge.com/best/analytics)
+
+### Security and Infrastructure
+
+Identity and access management (IAM), SIEM platforms, endpoint detection and response (EDR), vulnerability management, cloud security, compliance tools, VPN services, and password managers.
+
+Relevant hubs: [Security Tools](https://comparedge.com/best/security) | [IAM Platforms](https://comparedge.com/best/iam) | [Cloud Security](https://comparedge.com/best/cloud-security) | [Password Managers](https://comparedge.com/best/password-managers)
+
+### Developer Infrastructure
+
+Cloud hosting, DevOps tooling, databases, vector databases, API management, monitoring, logging, feature flags, A/B testing, and email infrastructure.
+
+Relevant hubs: [Cloud Hosting](https://comparedge.com/best/cloud-hosting) | [DevOps Tools](https://comparedge.com/best/devops) | [Database Comparison](https://comparedge.com/best/database) | [Vector Databases](https://comparedge.com/best/vector-db) | [Monitoring Tools](https://comparedge.com/best/monitoring)
+
+### Finance and Commerce
+
+Payment processing, e-commerce platforms, crypto exchanges, crypto trading bots, DeFi tools, decentralized exchanges, and NFT tools.
+
+Relevant hubs: [Payment Processing](https://comparedge.com/best/payment-processing) | [E-Commerce Platforms](https://comparedge.com/best/e-commerce) | [Crypto Exchanges](https://comparedge.com/best/crypto-exchanges)
+
+### Data and Analytics
+
+Business intelligence, data visualization, data science tools, and BI platforms across enterprise and mid-market segments.
+
+Relevant hubs: [BI Tools](https://comparedge.com/best/bi-tools) | [Data Visualization](https://comparedge.com/best/data-visualization)
+
+## Supported Categories
+
+`ai-tools` `llm` `ai-coding` `ai-writing` `ai-image` `ai-video` `ai-audio` `project-management` `crm` `email-marketing` `customer-support` `analytics` `design-tools` `video-conferencing` `cloud-hosting` `devops` `security` `cloud-security` `iam` `siem` `edr` `vulnerability-management` `compliance` `erp` `hr-tools` `accounting` `legal-tech` `data-visualization` `bi-tools` `database` `vector-db` `api-management` `payment-processing` `e-commerce` `email-infrastructure` `monitoring` `logging` `feature-flags` `a-b-testing` `crypto-exchanges` `crypto-trading-bots` `defi-tools` `dex` `nft-tools` `vpn` `password-managers`
+
+Use `list_categories` to retrieve the full list with display names at runtime.
+
+## Data Quality
+
+Pricing data is verified weekly against vendor pricing pages. Each product record includes a `verifiedAt` field indicating the date of the most recent verification. Ratings are aggregated from G2 and Capterra review platforms. The dataset covers 506 active products and 2 discontinued products (flagged).
+
+Data source: [ComparEdge Software Intelligence](https://comparedge.com) | [Pricing Guide](https://comparedge.com/pricing) | [Tool Directory](https://comparedge.com/tools) | [Alternatives](https://comparedge.com/alternatives) | [Comparisons](https://comparedge.com/compare)
+
+## Browser Extension
+
+For users who prefer a browser-based interface, the [ComparEdge Advisor Chrome Extension](https://comparedge.com/extension) provides access to the same software intelligence data while browsing. It surfaces ratings, pricing summaries, and alternatives directly in the browser without requiring an AI assistant.
+
+Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/extension/docs)
+
+## Technical Details
+
+- Protocol: MCP 2024-11-05, JSON-RPC 2.0 over stdio
+- Runtime: Node.js 18+
+- Dependencies: zero (Node.js built-ins only)
+- Data transport: HTTPS fetch to comparedge.com (live, updated daily)
+- In-process caching: tool and pricing data are cached for the duration of the server process
+
+## Repository
+
+[github.com/comparedge/mcp-server-comparedge](https://github.com/comparedge/mcp-server-comparedge)
 
 ## License
 
-MIT License. Copyright (c) ComparEdge. See LICENSE for details.
+MIT
