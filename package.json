@@ -1,7 +1,7 @@
 {
   "name": "@comparedge/mcp-server",
-  "version": "2.1.6",
-  "mcpName": "io.github.comparedge/mcp-server-comparedge",
+  "version": "2.1.7",
+  "mcpName": "io.github.imkemit-ops/comparedge-mcp",
   "description": "MCP server for ComparEdge: verified pricing, alternatives, and feature comparisons for 508+ SaaS and AI tools.",
   "main": "index.js",
   "bin": {
