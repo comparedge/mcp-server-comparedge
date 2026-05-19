@@ -112,7 +112,7 @@ List all LLM tools sorted by starting price
 
 Large language models, AI coding assistants, AI writing tools, AI image generation, AI video generation, AI audio tools, and AI productivity software. Includes pricing for token-based and subscription models across OpenAI, Anthropic, Google, Meta, Mistral, Cohere, and 80+ additional providers.
 
-Relevant hubs: [AI Assistants](https://comparedge.com/best/ai-assistants) | [LLM Comparison](https://comparedge.com/best/llm) | [AI Coding Tools](https://comparedge.com/best/ai-coding) | [AI Writing Tools](https://comparedge.com/best/ai-writing) | [AI Image](https://comparedge.com/best/ai-image)
+Relevant hubs: [Best AI Tools](https://comparedge.com/best/ai-tools) | [LLM Comparison](https://comparedge.com/best/llm) | [AI Coding Tools](https://comparedge.com/best/ai-coding) | [AI Writing Tools](https://comparedge.com/best/ai-writing) | [AI Assistants](https://comparedge.com/best/ai-assistants)
 
 ### Business Software
 
@@ -177,4 +177,5 @@ Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/
 ## License
 
 MIT
+
 
