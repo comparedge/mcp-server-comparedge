@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.1.0
- * MCP protocol version 2024-11-05
+ * ComparEdge MCP Server v2.3.0
+ * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
  * Data source: comparedge.com (508 products, live)
  */
@@ -499,9 +499,9 @@ async function handleRequest(req) {
 
   if (method === 'initialize') {
     return makeResponse(id, {
-      protocolVersion: '2024-11-05',
+      protocolVersion: '2025-03-26',
       capabilities: { tools: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.1.0' },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.3.0' },
     });
   }
 
