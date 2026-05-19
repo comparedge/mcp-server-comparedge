@@ -112,7 +112,7 @@ List all LLM tools sorted by starting price
 
 Large language models, AI coding assistants, AI writing tools, AI image generation, AI video generation, AI audio tools, and AI productivity software. Includes pricing for token-based and subscription models across OpenAI, Anthropic, Google, Meta, Mistral, Cohere, and 80+ additional providers.
 
-Relevant hubs: [Best AI Tools](https://comparedge.com/best/ai-tools) | [LLM Comparison](https://comparedge.com/best/llm) | [AI Coding Tools](https://comparedge.com/best/ai-coding) | [AI Writing Tools](https://comparedge.com/best/ai-writing)
+Relevant hubs: [AI Assistants](https://comparedge.com/best/ai-assistants) | [LLM Comparison](https://comparedge.com/best/llm) | [AI Coding Tools](https://comparedge.com/best/ai-coding) | [AI Writing Tools](https://comparedge.com/best/ai-writing) | [AI Image](https://comparedge.com/best/ai-image)
 
 ### Business Software
 
@@ -124,29 +124,29 @@ Relevant hubs: [CRM Comparison](https://comparedge.com/best/crm) | [Project Mana
 
 Identity and access management (IAM), SIEM platforms, endpoint detection and response (EDR), vulnerability management, cloud security, compliance tools, VPN services, and password managers.
 
-Relevant hubs: [Security Tools](https://comparedge.com/best/security) | [IAM Platforms](https://comparedge.com/best/iam) | [Cloud Security](https://comparedge.com/best/cloud-security) | [Password Managers](https://comparedge.com/best/password-managers)
+Relevant hubs: [Endpoint Security](https://comparedge.com/best/endpoint-security) | [IAM Platforms](https://comparedge.com/best/iam) | [Cloud Security](https://comparedge.com/best/cloud-security) | [Password Managers](https://comparedge.com/best/password-managers) | [VPN](https://comparedge.com/best/vpn)
 
 ### Developer Infrastructure
 
 Cloud hosting, DevOps tooling, databases, vector databases, API management, monitoring, logging, feature flags, A/B testing, and email infrastructure.
 
-Relevant hubs: [Cloud Hosting](https://comparedge.com/best/cloud-hosting) | [DevOps Tools](https://comparedge.com/best/devops) | [Database Comparison](https://comparedge.com/best/database) | [Vector Databases](https://comparedge.com/best/vector-db) | [Monitoring Tools](https://comparedge.com/best/monitoring)
+Relevant hubs: [Cloud Hosting](https://comparedge.com/best/cloud-hosting) | [Databases](https://comparedge.com/best/databases) | [Vector Databases](https://comparedge.com/best/vector-databases) | [Data Observability](https://comparedge.com/best/data-observability)
 
 ### Finance and Commerce
 
 Payment processing, e-commerce platforms, crypto exchanges, crypto trading bots, DeFi tools, decentralized exchanges, and NFT tools.
 
-Relevant hubs: [Payment Processing](https://comparedge.com/best/payment-processing) | [E-Commerce Platforms](https://comparedge.com/best/e-commerce) | [Crypto Exchanges](https://comparedge.com/best/crypto-exchanges)
+Relevant hubs: [Payments](https://comparedge.com/best/payments) | [Crypto Exchanges](https://comparedge.com/best/crypto-exchanges) | [Crypto Trading Bots](https://comparedge.com/best/crypto-trading-bots) | [DeFi Tools](https://comparedge.com/best/defi-tools)
 
 ### Data and Analytics
 
 Business intelligence, data visualization, data science tools, and BI platforms across enterprise and mid-market segments.
 
-Relevant hubs: [BI Tools](https://comparedge.com/best/bi-tools) | [Data Visualization](https://comparedge.com/best/data-visualization)
+Relevant hubs: [Analytics](https://comparedge.com/best/analytics) | [Data Observability](https://comparedge.com/best/data-observability) | [Finops](https://comparedge.com/best/finops)
 
 ## Supported Categories
 
-`ai-tools` `llm` `ai-coding` `ai-writing` `ai-image` `ai-video` `ai-audio` `project-management` `crm` `email-marketing` `customer-support` `analytics` `design-tools` `video-conferencing` `cloud-hosting` `devops` `security` `cloud-security` `iam` `siem` `edr` `vulnerability-management` `compliance` `erp` `hr-tools` `accounting` `legal-tech` `data-visualization` `bi-tools` `database` `vector-db` `api-management` `payment-processing` `e-commerce` `email-infrastructure` `monitoring` `logging` `feature-flags` `a-b-testing` `crypto-exchanges` `crypto-trading-bots` `defi-tools` `dex` `nft-tools` `vpn` `password-managers`
+`accounting` `ai-agents` `ai-assistants` `ai-coding` `ai-image` `ai-meeting` `ai-productivity` `ai-security` `ai-video` `ai-voice` `ai-writing` `analytics` `cloud-hosting` `cloud-security` `compliance` `crm` `crypto-analytics` `crypto-exchanges` `crypto-portfolio-trackers` `crypto-tax` `crypto-trading-bots` `crypto-wallets` `customer-support` `data-observability` `databases` `defi-tools` `design-tools` `dex` `email-marketing` `endpoint-security` `erp` `finops` `hr-tools` `iam` `llm` `password-managers` `payments` `project-management` `seo-tools` `vector-databases` `video-conferencing` `vpn` `website-builders`
 
 Use `list_categories` to retrieve the full list with display names at runtime.
 
@@ -177,3 +177,4 @@ Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/
 ## License
 
 MIT
+
