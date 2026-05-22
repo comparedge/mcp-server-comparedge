@@ -5,6 +5,7 @@
 [![mcpservers.org](https://img.shields.io/badge/mcpservers.org-listed-22c55e)](https://mcpservers.org/servers/comparedge/mcp-server-comparedge)
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Known Vulnerabilities](https://snyk.io/test/github/comparedge/mcp-server-comparedge/badge.svg)](https://snyk.io/test/github/comparedge/mcp-server-comparedge)
 
 Model Context Protocol server providing structured access to the [ComparEdge](https://comparedge.com) software intelligence database. Covers verified pricing plans, independently aggregated ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
 
