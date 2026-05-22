@@ -1,7 +1,7 @@
 # @comparedge/mcp-server
 
 [![mcp-server-comparedge MCP server](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge/badges/score.svg)](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.0-7c3aed)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.1-7c3aed)](https://registry.modelcontextprotocol.io)
 [![mcpservers.org](https://img.shields.io/badge/mcpservers.org-listed-22c55e)](https://mcpservers.org/servers/comparedge/mcp-server-comparedge)
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

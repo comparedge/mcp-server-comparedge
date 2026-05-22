@@ -125,7 +125,6 @@ const CATEGORIES = [
   { slug: 'ai-meeting', name: 'AI Meeting Tools' },
   { slug: 'ai-productivity', name: 'AI Productivity' },
   { slug: 'ai-security', name: 'AI Security' },
-  { slug: 'ai-tools', name: 'AI Tools' },
   { slug: 'ai-video', name: 'AI Video' },
   { slug: 'ai-voice', name: 'AI Voice' },
   { slug: 'ai-writing', name: 'AI Writing' },
@@ -264,7 +263,7 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'list_categories',
-    description: 'List all 45 supported software categories with their slugs and display names.',
+    description: 'List all 44 supported software categories with their slugs and display names.',
     inputSchema: {
       type: 'object',
       properties: {},
@@ -699,7 +698,7 @@ async function handleRequest(req) {
     return makeResponse(id, {
       protocolVersion: '2025-03-26',
       capabilities: { tools: {}, prompts: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.5.0' },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.5.1' },
     });
   }
 
