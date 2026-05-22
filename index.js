@@ -1,12 +1,112 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.3.0
+ * ComparEdge MCP Server v2.4.0
  * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
  * Data source: comparedge.com (508 products, live)
  */
 
 import { createInterface } from 'readline';
+
+// ─── Lightweight validator (zero external dependencies) ──────────────────────
+// Mimics Zod's safeParse API so migration to Zod is trivial if needed later.
+// Returns { success: true, data } or { success: false, error: { issues: [...] } }
+
+function validate(schema, args) {
+  const issues = [];
+  const data = {};
+
+  for (const [key, rule] of Object.entries(schema)) {
+    const value = args?.[key];
+    const isPresent = value !== undefined && value !== null;
+
+    if (rule.required && !isPresent) {
+      issues.push({ path: key, message: `"${key}" is required but was not provided` });
+      continue;
+    }
+    if (!isPresent) {
+      data[key] = rule.default;
+      continue;
+    }
+
+    if (rule.type === 'string') {
+      if (typeof value !== 'string') {
+        issues.push({ path: key, message: `"${key}" must be a string, got ${Array.isArray(value) ? 'array' : typeof value}` });
+        continue;
+      }
+      if (rule.minLength && value.length < rule.minLength) {
+        issues.push({ path: key, message: `"${key}" must not be empty` });
+        continue;
+      }
+      data[key] = value.trim();
+    } else if (rule.type === 'number') {
+      const n = typeof value === 'string' ? Number(value) : value;
+      if (typeof n !== 'number' || isNaN(n)) {
+        issues.push({ path: key, message: `"${key}" must be a number, got ${typeof value}` });
+        continue;
+      }
+      if (rule.min !== undefined && n < rule.min) {
+        issues.push({ path: key, message: `"${key}" must be ≥ ${rule.min}` });
+        continue;
+      }
+      if (rule.max !== undefined && n > rule.max) {
+        issues.push({ path: key, message: `"${key}" must be ≤ ${rule.max}` });
+        continue;
+      }
+      data[key] = n;
+    } else if (rule.type === 'boolean') {
+      if (typeof value !== 'boolean') {
+        issues.push({ path: key, message: `"${key}" must be a boolean, got ${typeof value}` });
+        continue;
+      }
+      data[key] = value;
+    }
+  }
+
+  if (issues.length > 0) {
+    return { success: false, error: { issues } };
+  }
+  return { success: true, data };
+}
+
+function validationError(issues) {
+  const msg = issues.map(i => `  • ${i.path}: ${i.message}`).join('\n');
+  return `Validation failed — please fix your parameters and retry:\n${msg}`;
+}
+
+// Schemas for each tool
+const SCHEMAS = {
+  search_tools: {
+    query: { type: 'string', required: true, minLength: 1 },
+    limit: { type: 'number', required: false, default: 5, min: 1, max: 20 },
+  },
+  get_tool: {
+    slug: { type: 'string', required: true, minLength: 1 },
+  },
+  compare_tools: {
+    tool1: { type: 'string', required: true, minLength: 1 },
+    tool2: { type: 'string', required: true, minLength: 1 },
+  },
+  list_category: {
+    category: { type: 'string', required: true, minLength: 1 },
+    sort_by:  { type: 'string', required: false, default: 'rating' },
+    free_only:{ type: 'boolean', required: false, default: false },
+  },
+  get_alternatives: {
+    slug:  { type: 'string', required: true, minLength: 1 },
+    limit: { type: 'number', required: false, default: 5, min: 1, max: 10 },
+  },
+  get_pricing: {
+    slug: { type: 'string', required: true, minLength: 1 },
+  },
+  get_leaderboard: {
+    category: { type: 'string', required: false, default: 'all' },
+    limit:    { type: 'number', required: false, default: 10, min: 1, max: 50 },
+  },
+  list_categories: {},
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const TOOLS_JSON   = 'https://comparedge.com/llms-tools.json';
 const PRICING_JSON = 'https://comparedge.com/llms-pricing.json';
@@ -471,14 +571,24 @@ function listCategoriesFn() {
 // --- Dispatch ---
 
 async function callTool(name, args) {
+  const schema = SCHEMAS[name];
+  if (schema === undefined) throw new Error(`Unknown tool: ${name}`);
+
+  // Validate & coerce args — gives agent actionable error instead of raw crash
+  const result = validate(schema, args || {});
+  if (!result.success) {
+    return validationError(result.error.issues);
+  }
+  const validated = result.data;
+
   switch (name) {
-    case 'search_tools':    return searchTools(args);
-    case 'get_tool':        return getTool(args);
-    case 'compare_tools':   return compareTools(args);
-    case 'list_category':   return listCategory(args);
-    case 'get_alternatives':return getAlternatives(args);
-    case 'get_pricing':     return getPricing(args);
-    case 'get_leaderboard': return getLeaderboard(args);
+    case 'search_tools':    return searchTools(validated);
+    case 'get_tool':        return getTool(validated);
+    case 'compare_tools':   return compareTools(validated);
+    case 'list_category':   return listCategory(validated);
+    case 'get_alternatives':return getAlternatives(validated);
+    case 'get_pricing':     return getPricing(validated);
+    case 'get_leaderboard': return getLeaderboard(validated);
     case 'list_categories': return listCategoriesFn();
     default: throw new Error(`Unknown tool: ${name}`);
   }
@@ -501,7 +611,7 @@ async function handleRequest(req) {
     return makeResponse(id, {
       protocolVersion: '2025-03-26',
       capabilities: { tools: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.3.0' },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.4.0' },
     });
   }
 
