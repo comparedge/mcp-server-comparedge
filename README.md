@@ -1,7 +1,7 @@
 # @comparedge/mcp-server
 
 [![mcp-server-comparedge MCP server](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge/badges/score.svg)](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.4.0-7c3aed)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.0-7c3aed)](https://registry.modelcontextprotocol.io)
 [![mcpservers.org](https://img.shields.io/badge/mcpservers.org-listed-22c55e)](https://mcpservers.org/servers/comparedge/mcp-server-comparedge)
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -95,7 +95,27 @@ Use the `npx @comparedge/mcp-server` command with stdio transport in any MCP-com
 | `get_alternatives` | `slug` (string) | Top alternatives within the same category, sorted by rating. Optional: `limit` (default 5). |
 | `get_pricing` | `slug` (string) | Complete verified pricing breakdown: all plans, per-plan highlights, token pricing where applicable, and verification date. |
 | `get_leaderboard` | `category` (optional) | Top-rated tools by category or overall. Optional: `limit` (default 10). |
-| `search_tools` | none | All 45 supported category slugs and display names. |
+| `list_categories` | none | All 45 supported category slugs and display names. |
+
+## Prompts
+
+Pre-built prompt templates that guide AI assistants through structured analysis workflows.
+
+| Prompt | Arguments | Description |
+|---|---|---|
+| `find_best_tool` | `use_case` (string), `budget` (optional) | Finds the best tool for a specific use case, with budget filtering. Runs a structured search, filters by price, and returns a ranked recommendation with rationale. |
+| `compare_pricing` | `tool1`, `tool2` (strings) | Side-by-side pricing analysis of two tools. Breaks down all plans, highlights value differences, and recommends the better option for different user types. |
+| `evaluate_tool` | `slug` (string) | Deep evaluation of a single tool: pricing tiers, rating quality, alternatives, and whether it is worth the cost. |
+| `category_overview` | `category` (string) | Full market overview for a category: top tools, price range, free plan availability, and which tool leads on value. |
+
+### Usage Examples
+
+```
+Find the best LLM API for a developer with a $50/month budget
+Compare pricing between Notion and Confluence
+Evaluate whether Datadog is worth the cost
+Give me a market overview of the CRM category
+```
 
 ## Usage Examples
 
@@ -150,13 +170,13 @@ Relevant hubs: [Analytics](https://comparedge.com/best/analytics) | [Data Observ
 
 `accounting` `ai-agents` `ai-assistants` `ai-coding` `ai-image` `ai-meeting` `ai-productivity` `ai-security` `ai-video` `ai-voice` `ai-writing` `analytics` `cloud-hosting` `cloud-security` `compliance` `crm` `crypto-analytics` `crypto-exchanges` `crypto-portfolio-trackers` `crypto-tax` `crypto-trading-bots` `crypto-wallets` `customer-support` `data-observability` `databases` `defi-tools` `design-tools` `dex` `email-marketing` `endpoint-security` `erp` `finops` `hr-tools` `iam` `llm` `password-managers` `payments` `project-management` `seo-tools` `vector-databases` `video-conferencing` `vpn` `website-builders`
 
-Use `search_tools` to retrieve the full list with display names at runtime.
+Use `list_categories` to retrieve the full list with display names at runtime.
 
 ## Data Quality
 
-ComparEdge applies a multi-layer verification process to every product record. Pricing is verified directly against vendor pricing pages on a weekly rotation cycle. Each product includes a `verifiedAt` field reflecting the date of last verification. User ratings are aggregated independently across multiple review sources and normalized to a consistent 0-5 scale. The dataset covers 508 products (flagged as such).
+ComparEdge applies a multi-layer verification process to every product record. Pricing is verified directly against vendor pricing pages on a weekly rotation cycle. Each product includes a `verifiedAt` field reflecting the date of last verification. User ratings are aggregated independently across multiple review sources and normalized to a consistent 0-5 scale.
 
-Data source: [ComparEdge Software Intelligence](https://comparedge.com) | [Pricing Guide](https://comparedge.com/pricing) | [Tool Directory](https://comparedge.com/tools) | [Alternatives](https://comparedge.com/alternatives) | [Comparisons](https://comparedge.com/compare)
+Data source: [ComparEdge Software Intelligence](https://comparedge.com) | [Pricing Guide](https://comparedge.com/pricing) | [Tool Directory](https://comparedge.com/tools) | [Alternatives](https://comparedge.com/alternatives) | [Comparisons](https://comparedge.com/compare) | [MCP Docs](https://comparedge.com/mcp)
 
 ## Browser Extension
 
@@ -171,6 +191,7 @@ Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/
 - Dependencies: zero (Node.js built-ins only)
 - Data transport: HTTPS fetch to comparedge.com (live, updated daily)
 - In-process caching: tool and pricing data are cached for the duration of the server process
+- Capabilities: `tools`, `prompts`
 
 ## Repository
 
@@ -179,5 +200,3 @@ Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/
 ## License
 
 MIT
-
-
