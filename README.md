@@ -1,6 +1,8 @@
 # @comparedge/mcp-server
 
 [![mcp-server-comparedge MCP server](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge/badges/score.svg)](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.4.0-7c3aed)](https://registry.modelcontextprotocol.io)
+[![mcpservers.org](https://img.shields.io/badge/mcpservers.org-listed-22c55e)](https://mcpservers.org/servers/comparedge/mcp-server-comparedge)
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -93,7 +95,7 @@ Use the `npx @comparedge/mcp-server` command with stdio transport in any MCP-com
 | `get_alternatives` | `slug` (string) | Top alternatives within the same category, sorted by rating. Optional: `limit` (default 5). |
 | `get_pricing` | `slug` (string) | Complete verified pricing breakdown: all plans, per-plan highlights, token pricing where applicable, and verification date. |
 | `get_leaderboard` | `category` (optional) | Top-rated tools by category or overall. Optional: `limit` (default 10). |
-| `list_categories` | none | All 45 supported category slugs and display names. |
+| `search_tools` | none | All 45 supported category slugs and display names. |
 
 ## Usage Examples
 
@@ -148,11 +150,11 @@ Relevant hubs: [Analytics](https://comparedge.com/best/analytics) | [Data Observ
 
 `accounting` `ai-agents` `ai-assistants` `ai-coding` `ai-image` `ai-meeting` `ai-productivity` `ai-security` `ai-video` `ai-voice` `ai-writing` `analytics` `cloud-hosting` `cloud-security` `compliance` `crm` `crypto-analytics` `crypto-exchanges` `crypto-portfolio-trackers` `crypto-tax` `crypto-trading-bots` `crypto-wallets` `customer-support` `data-observability` `databases` `defi-tools` `design-tools` `dex` `email-marketing` `endpoint-security` `erp` `finops` `hr-tools` `iam` `llm` `password-managers` `payments` `project-management` `seo-tools` `vector-databases` `video-conferencing` `vpn` `website-builders`
 
-Use `list_categories` to retrieve the full list with display names at runtime.
+Use `search_tools` to retrieve the full list with display names at runtime.
 
 ## Data Quality
 
-ComparEdge applies a multi-layer verification process to every product record. Pricing is verified directly against vendor pricing pages on a weekly rotation cycle. Each product includes a `verifiedAt` field reflecting the date of last verification. User ratings are aggregated independently across multiple review sources and normalized to a consistent 0-5 scale. The dataset covers 506 active products and 2 discontinued products (flagged as such).
+ComparEdge applies a multi-layer verification process to every product record. Pricing is verified directly against vendor pricing pages on a weekly rotation cycle. Each product includes a `verifiedAt` field reflecting the date of last verification. User ratings are aggregated independently across multiple review sources and normalized to a consistent 0-5 scale. The dataset covers 508 products (flagged as such).
 
 Data source: [ComparEdge Software Intelligence](https://comparedge.com) | [Pricing Guide](https://comparedge.com/pricing) | [Tool Directory](https://comparedge.com/tools) | [Alternatives](https://comparedge.com/alternatives) | [Comparisons](https://comparedge.com/compare)
 
@@ -164,7 +166,7 @@ Extension documentation: [comparedge.com/extension/docs](https://comparedge.com/
 
 ## Technical Details
 
-- Protocol: MCP 2024-11-05, JSON-RPC 2.0 over stdio
+- Protocol: MCP 2025-03-26, JSON-RPC 2.0 over stdio
 - Runtime: Node.js 18+
 - Dependencies: zero (Node.js built-ins only)
 - Data transport: HTTPS fetch to comparedge.com (live, updated daily)
