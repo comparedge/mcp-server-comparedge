@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.5.0
+ * ComparEdge MCP Server v2.4.0
  * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
  * Data source: comparedge.com (508 products, live)
@@ -604,102 +604,14 @@ function makeError(id, code, message) {
   return JSON.stringify({ jsonrpc: '2.0', id, error: { code, message } });
 }
 
-// --- Prompts ---
-
-const PROMPT_DEFINITIONS = [
-  {
-    name: 'find_best_tool',
-    description: 'Find the best software tool for a specific use case, job, or requirement. Returns ranked recommendations with pricing and free plan status.',
-    arguments: [
-      { name: 'use_case', description: 'What you need to do (e.g. "manage customer relationships", "write code faster", "send email campaigns")', required: true },
-    ],
-  },
-  {
-    name: 'compare_pricing',
-    description: 'Side-by-side pricing and feature comparison of two software tools. Shows plan names, prices, and key differences to help with a buying decision.',
-    arguments: [
-      { name: 'tool_a', description: 'First tool name or slug (e.g. "Notion", "notion")', required: true },
-      { name: 'tool_b', description: 'Second tool name or slug (e.g. "Linear", "linear")', required: true },
-    ],
-  },
-  {
-    name: 'evaluate_tool',
-    description: 'Full evaluation of a software tool: profile overview, verified pricing plans, and top alternatives in the same category.',
-    arguments: [
-      { name: 'tool', description: 'Tool name or slug (e.g. "HubSpot", "hubspot")', required: true },
-    ],
-  },
-  {
-    name: 'category_overview',
-    description: 'Overview of the best tools in a software category. Returns top-rated tools with pricing, free plan availability, and ComparEdge links.',
-    arguments: [
-      { name: 'category', description: 'Software category (e.g. "CRM", "project management", "AI coding", "LLM")', required: true },
-    ],
-  },
-];
-
-async function getPrompt(name, args) {
-  const a = args || {};
-  if (name === 'find_best_tool') {
-    const use_case = a.use_case || 'productivity tools';
-    return {
-      messages: [{
-        role: 'user',
-        content: {
-          type: 'text',
-          text: `I need to find the best software tool for: "${use_case}". Please search ComparEdge using search_tools to find relevant options, then use get_pricing on the top 2-3 results to compare costs. Present a ranked recommendation with: tool name, starting price, free plan availability, and a direct link. Focus on verified pricing data.`,
-        },
-      }],
-    };
-  }
-  if (name === 'compare_pricing') {
-    const a_name = a.tool_a || 'notion';
-    const b_name = a.tool_b || 'linear';
-    return {
-      messages: [{
-        role: 'user',
-        content: {
-          type: 'text',
-          text: `Compare the pricing of "${a_name}" vs "${b_name}". Use search_tools to find the correct slug for each, then call compare_tools to get a structured comparison. Also call get_pricing on both for full plan details. Present the results as a clear side-by-side table showing: plan names, prices, billing intervals, and which is better value at each tier.`,
-        },
-      }],
-    };
-  }
-  if (name === 'evaluate_tool') {
-    const tool = a.tool || 'notion';
-    return {
-      messages: [{
-        role: 'user',
-        content: {
-          type: 'text',
-          text: `Give me a full evaluation of "${tool}". Use search_tools to find the slug, then: (1) call get_tool for the full profile, (2) call get_pricing for all pricing plans, (3) call get_alternatives to see what competitors exist. Present: overview, pricing table, pros/cons, and top 3 alternatives with prices.`,
-        },
-      }],
-    };
-  }
-  if (name === 'category_overview') {
-    const category = a.category || 'crm';
-    return {
-      messages: [{
-        role: 'user',
-        content: {
-          type: 'text',
-          text: `Give me an overview of the best "${category}" tools. Use list_categories to find the correct category slug, then call get_leaderboard for the top tools. For the top 3, call get_pricing to get plan details. Present a ranked comparison table with: rank, tool name, rating, starting price, free plan, and a ComparEdge link.`,
-        },
-      }],
-    };
-  }
-  throw new Error(`Prompt not found: ${name}`);
-}
-
 async function handleRequest(req) {
   const { id, method, params } = req;
 
   if (method === 'initialize') {
     return makeResponse(id, {
       protocolVersion: '2025-03-26',
-      capabilities: { tools: {}, prompts: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.5.0' },
+      capabilities: { tools: {} },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.4.0' },
     });
   }
 
@@ -722,20 +634,6 @@ async function handleRequest(req) {
     }
   }
 
-  if (method === 'prompts/list') {
-    return makeResponse(id, { prompts: PROMPT_DEFINITIONS });
-  }
-
-  if (method === 'prompts/get') {
-    const { name, arguments: args } = params || {};
-    try {
-      const result = await getPrompt(name, args);
-      return makeResponse(id, result);
-    } catch (err) {
-      return makeError(id, -32602, err.message);
-    }
-  }
-
   if (method === 'notifications/initialized') {
     return null;
   }
@@ -747,13 +645,6 @@ async function handleRequest(req) {
 
 const rl = createInterface({ input: process.stdin, terminal: false });
 
-let _pendingRequests = 0;
-let _stdinClosed = false;
-
-function maybeExit() {
-  if (_stdinClosed && _pendingRequests === 0) process.exit(0);
-}
-
 rl.on('line', async (line) => {
   const trimmed = line.trim();
   if (!trimmed) return;
@@ -764,19 +655,10 @@ rl.on('line', async (line) => {
     process.stdout.write(makeError(null, -32700, 'Parse error') + '\n');
     return;
   }
-  _pendingRequests++;
-  try {
-    const response = await handleRequest(req);
-    if (response !== null) {
-      process.stdout.write(response + '\n');
-    }
-  } finally {
-    _pendingRequests--;
-    maybeExit();
+  const response = await handleRequest(req);
+  if (response !== null) {
+    process.stdout.write(response + '\n');
   }
 });
 
-rl.on('close', () => {
-  _stdinClosed = true;
-  maybeExit();
-});
+rl.on('close', () => process.exit(0));
