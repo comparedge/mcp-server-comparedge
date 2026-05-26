@@ -49,7 +49,7 @@ Show me the top-rated password managers
 
 Pricing and feature data is sourced from vendor sites, verified manually, and updated continuously. Coverage includes SaaS, AI tools, security software, databases, and developer tools across 45 categories.
 
-Full dataset: [comparedge.com/tools](https://comparedge.com/tools) — MCP docs: [comparedge.com/mcp](https://comparedge.com/mcp)
+Full dataset: [comparedge.com/open-data](https://comparedge.com/open-data) — MCP docs: [comparedge.com/mcp/docs](https://comparedge.com/mcp/docs)
 
 **Resources**
 - [MCP Server Docs](https://comparedge.com/mcp/docs) — setup guides, tool reference, examples
