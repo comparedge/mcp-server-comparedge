@@ -47,14 +47,13 @@ Show me the top-rated password managers
 
 ## Data
 
-Pricing and feature data is sourced from vendor sites, verified manually, and updated continuously. Coverage includes SaaS, AI tools, security software, databases, and developer tools across 45 categories.
+Pricing and feature data is sourced from vendor sites, verified manually, and updated continuously. Coverage spans SaaS, AI tools, security software, databases, and developer infrastructure across 45 categories.
 
-Full dataset: [comparedge.com/open-data](https://comparedge.com/open-data) — MCP docs: [comparedge.com/mcp/docs](https://comparedge.com/mcp/docs)
-
-**Resources**
-- [MCP Server Docs](https://comparedge.com/mcp/docs) — setup guides, tool reference, examples
-- [Open Data](https://comparedge.com/open-data) — raw pricing and feature datasets (CC BY 4.0)
-- [Data Methodology](https://comparedge.com/methodology) — how pricing data is collected and verified
+| | |
+|---|---|
+| **Documentation** | [comparedge.com/mcp/docs](https://comparedge.com/mcp/docs) |
+| **Open Dataset** | [comparedge.com/open-data](https://comparedge.com/open-data) — CC BY 4.0 |
+| **Data Methodology** | [comparedge.com/methodology](https://comparedge.com/methodology) |
 
 ## License
 
