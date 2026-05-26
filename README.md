@@ -51,6 +51,11 @@ Pricing and feature data is sourced from vendor sites, verified manually, and up
 
 Full dataset: [comparedge.com/tools](https://comparedge.com/tools) — MCP docs: [comparedge.com/mcp](https://comparedge.com/mcp)
 
+**Resources**
+- [MCP Protocol Specification](https://modelcontextprotocol.io) — official MCP docs
+- [Open Data](https://comparedge.com/open-data) — raw pricing and feature datasets (CC BY 4.0)
+- [Data Methodology](https://comparedge.com/methodology) — how pricing data is collected and verified
+
 ## License
 
 MIT — [github.com/comparedge/mcp-server-comparedge](https://github.com/comparedge/mcp-server-comparedge)
