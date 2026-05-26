@@ -1,13 +1,13 @@
 # @comparedge/mcp-server
 
 [![mcp-server-comparedge MCP server](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge/badges/score.svg)](https://glama.ai/mcp/servers/comparedge/mcp-server-comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.1-7c3aed)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.5-7c3aed)](https://registry.modelcontextprotocol.io)
 [![mcpservers.org](https://img.shields.io/badge/mcpservers.org-listed-22c55e)](https://mcpservers.org/servers/comparedge/mcp-server-comparedge)
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Known Vulnerabilities](https://snyk.io/test/github/comparedge/mcp-server-comparedge/badge.svg)](https://snyk.io/test/github/comparedge/mcp-server-comparedge)
 
-Model Context Protocol server providing structured access to the [ComparEdge](https://comparedge.com) software intelligence database. Covers verified pricing plans, independently aggregated ratings, feature breakdowns, and category rankings for 508+ SaaS, AI, and security products. No API key required.
+Model Context Protocol server providing structured access to the [ComparEdge](https://comparedge.com) software intelligence database. Covers verified pricing plans, independently aggregated ratings, feature breakdowns, and category rankings for 495+ SaaS, AI, and security products. No API key required.
 
 ## Installation
 
@@ -89,7 +89,7 @@ Use the `npx @comparedge/mcp-server` command with stdio transport in any MCP-com
 
 | Tool | Required Parameters | Description |
 |---|---|---|
-| `search_tools` | `query` (string) | Full-text search across 508+ products by name, keyword, or use case. Returns name, category, rating, free plan flag, starting price, and ComparEdge URL. |
+| `search_tools` | `query` (string) | Full-text search across 495+ products by name, keyword, or use case. Returns name, category, rating, free plan flag, starting price, and ComparEdge URL. |
 | `get_tool` | `slug` (string) | Complete product profile: description, category, rating, all pricing plans with highlights, key features, and verified date. |
 | `compare_tools` | `tool1`, `tool2` (strings) | Side-by-side comparison of two products: pricing, ratings, free plan availability, and direct comparison URL. |
 | `list_category` | `category` (string) | All tools in a category. Optional: `sort_by` ("rating" or "startingPrice"), `free_only` (boolean). |
