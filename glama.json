@@ -4,8 +4,8 @@
     "imkemit-ops"
   ],
   "name": "mcp-server-comparedge",
-  "description": "Query verified pricing, independently aggregated ratings, feature comparisons, and category leaderboards for 508+ SaaS, AI, and security tools across 45 categories. Zero dependencies, no API key required.",
-  "version": "2.1.4",
+  "description": "Query verified pricing, independently aggregated ratings, feature comparisons, and category leaderboards for 495+ SaaS, AI, and security tools across 45 categories. Zero dependencies, no API key required.",
+  "version": "2.5.5",
   "license": "MIT",
   "homepage": "https://comparedge.com",
   "repository": "https://github.com/comparedge/mcp-server-comparedge",
@@ -50,11 +50,21 @@
   "installation": {
     "npm": {
       "command": "npx",
-      "args": ["@comparedge/mcp-server"]
+      "args": [
+        "@comparedge/mcp-server"
+      ]
     }
   },
   "keywords": [
-    "saas", "pricing", "software-comparison", "alternatives", "ratings",
-    "ai-tools", "security", "crm", "project-management", "productivity"
+    "saas",
+    "pricing",
+    "software-comparison",
+    "alternatives",
+    "ratings",
+    "ai-tools",
+    "security",
+    "crm",
+    "project-management",
+    "productivity"
   ]
 }

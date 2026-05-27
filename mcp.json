@@ -1,31 +1,23 @@
 {
   "name": "ComparEdge MCP Server",
-  "description": "Zero-dependency MCP server providing verified SaaS pricing, alternatives, and feature comparisons for 508+ tools across 45+ categories.",
-  "version": "2.1.8",
+  "description": "Zero-dependency MCP server providing verified SaaS pricing, alternatives, and feature comparisons for 495+ tools across 45 categories.",
+  "version": "2.5.5",
   "type": "mcp",
   "transport": "stdio",
   "command": "npx",
   "args": ["-y", "@comparedge/mcp-server"],
   "tools": [
-    {
-      "name": "search_tools",
-      "description": "Search the ComparEdge database by product name, category, or keyword."
-    },
-    {
-      "name": "get_tool",
-      "description": "Retrieve the complete profile for a specific tool by its slug identifier."
-    },
-    {
-      "name": "get_pricing",
-      "description": "Retrieve verified pricing plans for a specific tool."
-    },
-    {
-      "name": "get_alternatives",
-      "description": "Find verified alternatives to a given tool within the same category."
-    }
+    { "name": "search_tools",     "description": "Full-text search across 495+ products by name, keyword, or use case." },
+    { "name": "get_tool",         "description": "Complete product profile: description, category, rating, pricing plans, and features." },
+    { "name": "compare_tools",    "description": "Side-by-side comparison of two products: pricing, ratings, free plan availability." },
+    { "name": "list_category",    "description": "All tools in a category with optional sort and free-plan filter." },
+    { "name": "get_alternatives", "description": "Top alternatives within the same category, sorted by rating." },
+    { "name": "get_pricing",      "description": "Complete verified pricing breakdown: all plans, highlights, and verification date." },
+    { "name": "get_leaderboard",  "description": "Top-rated tools by category or overall." },
+    { "name": "list_categories",  "description": "All 45 supported category slugs and display names." }
   ],
   "homepage": "https://comparedge.com/mcp",
   "repository": "https://github.com/comparedge/mcp-server-comparedge",
   "license": "MIT",
-  "keywords": ["saas", "pricing", "mcp", "alternatives", "comparison"]
+  "keywords": ["saas", "pricing", "mcp", "alternatives", "comparison", "ai-tools"]
 }
