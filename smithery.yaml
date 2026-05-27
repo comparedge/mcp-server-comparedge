@@ -4,7 +4,7 @@ description: Query verified pricing, aggregated ratings, feature comparisons, an
 homepage: https://comparedge.com
 license: MIT
 runtime: node
-version: "2.5.5"
+version: "2.5.6"
 
 startCommand:
   type: stdio
