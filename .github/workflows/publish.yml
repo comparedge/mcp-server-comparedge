@@ -35,6 +35,15 @@ jobs:
 
       - name: Publish
         if: steps.check.outputs.skip == 'false'
-        run: npm publish --access public
+        run: |
+          npm publish --access public || {
+            EXIT=$?
+            # 403 = version already exists (race condition between manual publish and CI)
+            if npm view @comparedge/mcp-server@$(node -p "require('./package.json').version") version 2>/dev/null; then
+              echo "Version already published — treating as success"
+              exit 0
+            fi
+            exit $EXIT
+          }
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
