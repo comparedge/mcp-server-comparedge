@@ -5,7 +5,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.7-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero-dependency [Model Context Protocol](https://modelcontextprotocol.io) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
+A zero-dependency [Model Context Protocol](https://comparedge.com/mcp) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
 
 ## Installation
 
