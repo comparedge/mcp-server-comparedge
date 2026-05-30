@@ -4,6 +4,7 @@
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub_Marketplace-ComparEdge-2088FF?logo=github)](https://github.com/marketplace/comparedge)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.7-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![SafeSkill 96/100](https://img.shields.io/badge/SafeSkill-96%2F100_Verified%20Safe-brightgreen)](https://safeskill.dev/scan/comparedge-mcp-server-comparedge)
 
 A zero-dependency [Model Context Protocol](https://comparedge.com/mcp) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
 
