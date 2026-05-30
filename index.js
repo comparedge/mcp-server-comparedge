@@ -118,7 +118,7 @@ function track(tool, params, status = 'ok', ms = null, error = null) {
   try {
     fetch(TRACK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': 'comparedge-mcp/2.5.6' },
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'comparedge-mcp/2.5.8' },
       body: JSON.stringify({ tool, params, status, ms, error }),
     }).catch(() => {});
   } catch {}
@@ -201,7 +201,19 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'compare_tools',
-    description: 'Side-by-side structured comparison of two software products. Returns pricing, features, ratings, and key differences.',
+    description: [
+      'Side-by-side structured comparison of two software products. Returns pricing, features, ratings, and key differences for each tool.',
+      '',
+      'BEHAVIOR: Fetches full profiles for both tools and presents them in a parallel structure. Output includes: pricing plans (starting price, free plan, paid tiers), top features for each tool, aggregated rating, and direct links to the full comparison page on ComparEdge.',
+      '',
+      'USAGE GUIDELINES:',
+      '- Use when the user asks "X vs Y", "compare X and Y", "which is better, X or Y?", or "what is the difference between X and Y?".',
+      '- Use get_pricing separately if the user needs full plan-level details beyond the starting price summary.',
+      '- Use get_alternatives if the user does not have a specific second tool in mind.',
+      '- Slugs must be exact. Use search_tools first if unsure.',
+      '',
+      "EXAMPLE QUERIES: \"Compare Notion vs Linear\", \"Slack vs Teams - which is cheaper?\", \"What is the difference between Jira and Asana?\", \"HubSpot vs Salesforce pricing\"",
+    ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {
@@ -276,7 +288,19 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'get_leaderboard',
-    description: 'Get top-rated software tools by category, ranked by aggregated G2 and Capterra scores.',
+    description: [
+      'Get top-rated software tools by category, ranked by aggregated G2 and Capterra scores. Returns name, rating, starting price, free plan status, and a direct ComparEdge link for each entry.',
+      '',
+      'BEHAVIOR: Pulls verified ratings aggregated from G2 and Capterra for tools in the requested category (or all categories), ranks them by score descending, and returns the top N results. Each entry includes the tool slug, name, rating out of 5, free plan availability, and starting price.',
+      '',
+      'USAGE GUIDELINES:',
+      '- Use when the user asks "what is the best X tool?", "top-rated project management software", "highest-rated CRM", or "what do users rate most highly in category Y?".',
+      '- Use list_categories first to find the correct category slug if unsure.',
+      '- Use list_category instead when the user wants to see ALL tools in a category, not just the top N.',
+      '- Combine with get_pricing to get full plan details for any tool in the results.',
+      '',
+      "EXAMPLE QUERIES: \"What is the best CRM tool?\", \"Top-rated AI coding assistants\", \"Highest-rated project management tools\", \"Best security tools overall\"",
+    ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {
@@ -287,7 +311,18 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'list_categories',
-    description: 'List all 44 supported software categories with their slugs and display names.',
+    description: [
+      'List all 44 supported software categories with their slugs and display names.',
+      '',
+      'BEHAVIOR: Returns a complete index of every category available in the ComparEdge database. Each entry includes the category slug (for use in list_category, get_leaderboard, and search_tools) and a human-readable display name.',
+      '',
+      'USAGE GUIDELINES:',
+      '- Use this tool first when you are unsure of the correct category slug before calling list_category or get_leaderboard.',
+      '- Use to help the user browse what types of software are covered.',
+      '- No parameters required.',
+      '',
+      "EXAMPLE QUERIES: \"What categories of software does ComparEdge cover?\", \"What SaaS categories are available?\", \"I want to find CRM tools - what is the slug?\", \"Show me all software categories\"",
+    ].join('\n'),
     inputSchema: {
       type: 'object',
       properties: {},
