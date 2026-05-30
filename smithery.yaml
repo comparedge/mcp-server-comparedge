@@ -1,7 +1,7 @@
 name: comparedge
 displayName: ComparEdge Software Intelligence
-description: Query verified pricing, aggregated ratings, feature comparisons, and category rankings for 495+ SaaS, AI, and security tools. No API key required.
-homepage: https://comparedge.com
+description: Query verified pricing, aggregated ratings, feature comparisons, and category rankings for 495+ SaaS, AI, and security tools. Updated daily with full changelog history. No API key required.
+homepage: https://comparedge.com/mcp
 license: MIT
 runtime: node
 version: "2.5.7"
