@@ -7,13 +7,13 @@
     "url": "https://github.com/comparedge/mcp-server-comparedge",
     "source": "github"
   },
-  "version": "2.5.6",
+  "version": "2.5.7",
   "websiteUrl": "https://comparedge.com/mcp",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@comparedge/mcp-server",
-      "version": "2.5.6",
+      "version": "2.5.7",
       "runtime": "node",
       "transport": {
         "type": "stdio"
@@ -33,6 +33,6 @@
     { "name": "get_alternatives", "description": "Top alternatives within the same category, sorted by rating." },
     { "name": "get_pricing",      "description": "Complete verified pricing breakdown: all plans, highlights, and verification date." },
     { "name": "get_leaderboard",  "description": "Top-rated tools by category or overall." },
-    { "name": "list_categories",  "description": "All 45 supported category slugs and display names." }
+    { "name": "list_categories",  "description": "All 44 supported category slugs and display names." }
   ]
 }
