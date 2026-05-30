@@ -7,13 +7,13 @@
     "url": "https://github.com/comparedge/mcp-server-comparedge",
     "source": "github"
   },
-  "version": "2.5.7",
+  "version": "2.5.8",
   "websiteUrl": "https://comparedge.com/mcp",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@comparedge/mcp-server",
-      "version": "2.5.7",
+      "version": "2.5.8",
       "runtime": "node",
       "transport": {
         "type": "stdio"
@@ -21,18 +21,45 @@
       "startCommand": {
         "type": "stdio",
         "command": "npx",
-        "args": ["-y", "@comparedge/mcp-server"]
+        "args": [
+          "-y",
+          "@comparedge/mcp-server"
+        ]
       }
     }
   ],
   "tools": [
-    { "name": "search_tools",     "description": "Full-text search across 495+ products by name, keyword, or use case." },
-    { "name": "get_tool",         "description": "Complete product profile: description, category, rating, pricing plans, and features." },
-    { "name": "compare_tools",    "description": "Side-by-side comparison of two products: pricing, ratings, free plan availability." },
-    { "name": "list_category",    "description": "All tools in a category with optional sort and free-plan filter." },
-    { "name": "get_alternatives", "description": "Top alternatives within the same category, sorted by rating." },
-    { "name": "get_pricing",      "description": "Complete verified pricing breakdown: all plans, highlights, and verification date." },
-    { "name": "get_leaderboard",  "description": "Top-rated tools by category or overall." },
-    { "name": "list_categories",  "description": "All 44 supported category slugs and display names." }
+    {
+      "name": "search_tools",
+      "description": "Full-text search across 495+ products by name, keyword, or use case."
+    },
+    {
+      "name": "get_tool",
+      "description": "Complete product profile: description, category, rating, pricing plans, and features."
+    },
+    {
+      "name": "compare_tools",
+      "description": "Side-by-side comparison of two products: pricing, ratings, free plan availability."
+    },
+    {
+      "name": "list_category",
+      "description": "All tools in a category with optional sort and free-plan filter."
+    },
+    {
+      "name": "get_alternatives",
+      "description": "Top alternatives within the same category, sorted by rating."
+    },
+    {
+      "name": "get_pricing",
+      "description": "Complete verified pricing breakdown: all plans, highlights, and verification date."
+    },
+    {
+      "name": "get_leaderboard",
+      "description": "Top-rated tools by category or overall."
+    },
+    {
+      "name": "list_categories",
+      "description": "All 44 supported category slugs and display names."
+    }
   ]
 }
