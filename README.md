@@ -22,9 +22,9 @@ Add to your MCP client configuration:
 }
 ```
 
-**Claude Desktop** — `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Cursor** — Settings → MCP → Add Server  
-**VS Code + GitHub Copilot** — `.vscode/mcp.json`
+**Claude Desktop:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Cursor:** Settings > MCP > Add Server  
+**VS Code + GitHub Copilot:** `.vscode/mcp.json`
 
 Full setup guides: [ComparEdge MCP Server docs](https://comparedge.com/mcp/docs)
 
@@ -60,7 +60,7 @@ slug    string  required  URL-safe product identifier (e.g., "notion", "github-c
 ---
 
 ### `get_pricing`
-Complete verified pricing breakdown — all plans, prices, features per tier, trial status, and free plan availability. Includes per-token pricing for LLM/AI tools.
+Complete verified pricing breakdown: all plans, prices, features per tier, trial status, and free plan availability. Includes per-token pricing for LLM/AI tools.
 
 ```
 slug    string  required  Product slug. Use search_tools first if unsure of the exact slug.
@@ -75,7 +75,7 @@ slug    string  required  Product slug. Use search_tools first if unsure of the 
 ---
 
 ### `compare_tools`
-Side-by-side structured comparison of two software products — pricing, features, ratings, and key differences.
+Side-by-side structured comparison of two software products: pricing, features, ratings, and key differences.
 
 ```
 tool1    string  required  Slug of the first product
@@ -84,13 +84,13 @@ tool2    string  required  Slug of the second product
 
 **Example prompts:**
 - *"Compare Notion vs Coda"*
-- *"Notion vs Obsidian — which is better for a team?"*
+- *"Notion vs Obsidian: which is better for a team?"*
 - *"Compare Salesforce and HubSpot pricing"*
 
 ---
 
 ### `compare_pricing`
-Focused pricing analysis of two tools side by side — plan-by-plan cost breakdown with value assessment.
+Focused pricing analysis of two tools side by side: plan-by-plan cost breakdown with value assessment.
 
 ```
 tool1    string  required  Slug of the first product
@@ -113,7 +113,7 @@ limit    number  optional  Number of alternatives to return (default: 5, max: 10
 
 **Example prompts:**
 - *"What are the best alternatives to Salesforce under $50/user/mo?"*
-- *"I want to switch from Slack — what else is there?"*
+- *"I want to switch from Slack, what else is there?"*
 - *"Find open-source alternatives to Notion"*
 
 ---
@@ -167,11 +167,11 @@ Pricing and feature data is sourced directly from vendor pricing pages, verified
 | | |
 |---|---|
 | **Documentation** | [MCP Server setup guides and tool reference](https://comparedge.com/mcp/docs) |
-| **Open Dataset** | [495+ tools open dataset on ComparEdge](https://comparedge.com/open-data) — CC BY 4.0 |
+| **Open Dataset** | [495+ tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
 | **Data Methodology** | [How ComparEdge verifies pricing and ratings](https://comparedge.com/methodology) |
 | **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
 
 ## License
 
-MIT — [ComparEdge MCP Server source on GitHub](https://github.com/comparedge/mcp-server-comparedge)
+MIT: [ComparEdge MCP Server source on GitHub](https://github.com/comparedge/mcp-server-comparedge)
 
