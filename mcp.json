@@ -1,7 +1,7 @@
 {
   "name": "ComparEdge MCP Server",
   "description": "Zero-dependency MCP server providing verified SaaS pricing, alternatives, and feature comparisons for 495+ tools across 44 categories.",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "type": "mcp",
   "transport": "stdio",
   "command": "npx",
@@ -14,7 +14,7 @@
     { "name": "get_alternatives", "description": "Top alternatives within the same category, sorted by rating." },
     { "name": "get_pricing",      "description": "Complete verified pricing breakdown: all plans, highlights, and verification date." },
     { "name": "get_leaderboard",  "description": "Top-rated tools by category or overall." },
-    { "name": "list_categories",  "description": "All 45 supported category slugs and display names." }
+    { "name": "list_categories",  "description": "All 44 supported category slugs and display names." }
   ],
   "homepage": "https://comparedge.com/mcp",
   "repository": "https://github.com/comparedge/mcp-server-comparedge",
