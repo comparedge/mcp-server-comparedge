@@ -5,7 +5,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.7-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero-dependency [Model Context Protocol](https://comparedge.com/mcp) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
+A zero-dependency [Model Context Protocol](https://modelcontextprotocol.io) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
 
 ## Installation
 
@@ -26,7 +26,7 @@ Add to your MCP client configuration:
 **Cursor** — Settings → MCP → Add Server  
 **VS Code + GitHub Copilot** — `.vscode/mcp.json`
 
-Full setup guides: [comparedge.com/mcp/docs](https://comparedge.com/mcp/docs)
+Full setup guides: [ComparEdge MCP Server docs](https://comparedge.com/mcp/docs)
 
 ## Tools
 
@@ -150,7 +150,7 @@ limit       number  optional  Number of tools to return (default: 10, max: 50)
 ---
 
 ### `list_categories`
-List all 45 supported software categories with their slugs and display names.
+List all 44 supported software categories with their slugs and display names.
 
 **Example prompts:**
 - *"What categories does ComparEdge cover?"*
@@ -166,11 +166,12 @@ Pricing and feature data is sourced directly from vendor pricing pages, verified
 
 | | |
 |---|---|
-| **Documentation** | [comparedge.com/mcp/docs](https://comparedge.com/mcp/docs) |
-| **Open Dataset** | [comparedge.com/open-data](https://comparedge.com/open-data) — CC BY 4.0 |
-| **Data Methodology** | [comparedge.com/methodology](https://comparedge.com/methodology) |
-| **MCP Protocol Specification** | [modelcontextprotocol.io](https://modelcontextprotocol.io) |
+| **Documentation** | [MCP Server setup guides and tool reference](https://comparedge.com/mcp/docs) |
+| **Open Dataset** | [495+ tools open dataset on ComparEdge](https://comparedge.com/open-data) — CC BY 4.0 |
+| **Data Methodology** | [How ComparEdge verifies pricing and ratings](https://comparedge.com/methodology) |
+| **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
 
 ## License
 
-MIT — [github.com/comparedge/mcp-server-comparedge](https://github.com/comparedge/mcp-server-comparedge)
+MIT — [ComparEdge MCP Server source on GitHub](https://github.com/comparedge/mcp-server-comparedge)
+
