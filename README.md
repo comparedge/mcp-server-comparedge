@@ -2,10 +2,10 @@
 
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub_Marketplace-ComparEdge-2088FF?logo=github)](https://github.com/marketplace/comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.5.7-7c3aed)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.6.0-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero-dependency [Model Context Protocol](https://comparedge.com/mcp) server providing verified pricing, alternatives, and feature comparisons for 495+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
+A zero-dependency [Model Context Protocol server](https://modelcontextprotocol.io) providing verified pricing, alternatives, and feature comparisons for 494+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
 
 ## Installation
 
@@ -26,12 +26,12 @@ Add to your MCP client configuration:
 **Cursor:** Settings > MCP > Add Server  
 **VS Code + GitHub Copilot:** `.vscode/mcp.json`
 
-Full setup guides: [ComparEdge MCP Server docs](https://comparedge.com/mcp/docs)
+Full setup guides: [ComparEdge MCP Server — setup and tool reference](https://comparedge.com/mcp/docs)
 
 ## Tools
 
 ### `search_tools`
-Search 495+ software products by name, keyword, category, or natural language query.
+Search 494+ software products by name, keyword, category, or natural language query.
 
 ```
 query    string  required  Search query (product name, keyword, or use case)
@@ -104,7 +104,7 @@ tool2    string  required  Slug of the second product
 ---
 
 ### `get_alternatives`
-Top verified alternatives to a given tool within the same category, sorted by aggregated rating. Each result includes a direct ComparEdge comparison link.
+Top verified alternatives to a given tool within the same category, sorted by aggregated rating. Each result includes a direct comparison link to the ComparEdge side-by-side page.
 
 ```
 slug     string  required  Slug of the reference product
@@ -162,16 +162,16 @@ List all 44 supported software categories with their slugs and display names.
 
 ## Data
 
-Pricing and feature data is sourced directly from vendor pricing pages, verified manually against live sources, and updated continuously via an automated pipeline. Coverage spans SaaS, AI tools, security software, databases, and developer infrastructure. Each product record includes pricing plans, feature matrices, aggregated ratings from G2 and Capterra, free plan status, and trial availability.
+Pricing and feature data is sourced directly from vendor pricing pages, verified against live sources, and updated continuously via an automated pipeline. Coverage spans SaaS, AI tools, security software, databases, and developer infrastructure. Each product record includes pricing plans, feature matrices, aggregated ratings from G2 and Capterra, free plan status, and trial availability.
 
 | | |
 |---|---|
-| **Documentation** | [MCP Server setup guides and tool reference](https://comparedge.com/mcp/docs) |
-| **Open Dataset** | [495+ tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
-| **Data Methodology** | [How ComparEdge verifies pricing and ratings](https://comparedge.com/methodology) |
+| **Documentation** | [ComparEdge MCP Server — setup and tool reference](https://comparedge.com/mcp/docs) |
+| **Open Dataset** | [494+ SaaS tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
+| **Data Methodology** | [How ComparEdge verifies pricing and feature data](https://comparedge.com/methodology) |
+| **Compare Hub** | [Side-by-side SaaS comparisons — 556 curated pairs](https://comparedge.com/compare) |
 | **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
 
 ## License
 
-MIT: [ComparEdge MCP Server source on GitHub](https://github.com/comparedge/mcp-server-comparedge)
-
+MIT: [ComparEdge MCP Server source code on GitHub](https://github.com/comparedge/mcp-server-comparedge)

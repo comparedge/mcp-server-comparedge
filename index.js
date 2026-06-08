@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.5.6
+ * ComparEdge MCP Server v2.6.0
  * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
- * Data source: comparedge.com (495 products, live)
+ * Data source: comparedge.com (494 products, live)
  */
 
 import { createInterface } from 'readline';
@@ -118,7 +118,7 @@ function track(tool, params, status = 'ok', ms = null, error = null) {
   try {
     fetch(TRACK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': 'comparedge-mcp/2.5.8' },
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'comparedge-mcp/2.6.0' },
       body: JSON.stringify({ tool, params, status, ms, error }),
     }).catch(() => {});
   } catch {}
@@ -178,7 +178,7 @@ const CATEGORIES = [
 const TOOL_DEFINITIONS = [
   {
     name: 'search_tools',
-    description: 'Search 495+ software products by name, keyword, category, or natural language query. Returns name, category, rating, free plan availability, starting price, and ComparEdge URL.\n\nBEHAVIOR: Scores each product against all meaningful keywords in the query (stopwords like "best", "find", "top" are ignored). Supports both exact product names and natural language queries.\n\nUSAGE GUIDELINES:\n- Use to discover tools when you do not know the exact slug.\n- Use before calling get_tool or get_pricing if the slug is uncertain.\n- Use for category browsing: query "crm", "ai coding", "project management".\n- Natural language works: "best CRM for startups" → extracts "crm" and "startups" keywords.\n\nEXAMPLE QUERIES: "notion", "CRM", "best CRM for startups", "project management free", "ai coding tools"',
+    description: 'Search 494+ software products by name, keyword, category, or natural language query. Returns name, category, rating, free plan availability, starting price, and ComparEdge URL.\n\nBEHAVIOR: Scores each product against all meaningful keywords in the query (stopwords like "best", "find", "top" are ignored). Supports both exact product names and natural language queries.\n\nUSAGE GUIDELINES:\n- Use to discover tools when you do not know the exact slug.\n- Use before calling get_tool or get_pricing if the slug is uncertain.\n- Use for category browsing: query "crm", "ai coding", "project management".\n- Natural language works: "best CRM for startups" → extracts "crm" and "startups" keywords.\n\nEXAMPLE QUERIES: "notion", "CRM", "best CRM for startups", "project management free", "ai coding tools"',
     inputSchema: {
       type: 'object',
       properties: {
@@ -800,7 +800,7 @@ async function handleRequest(req) {
     return makeResponse(id, {
       protocolVersion: '2025-03-26',
       capabilities: { tools: {}, prompts: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.5.6' },
+      serverInfo: { name: 'comparedge-mcp-server', version: '2.6.0' },
     });
   }
 
