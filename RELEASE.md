@@ -3,7 +3,7 @@
 Каналы НЕ подтягивают новую версию сами вовремя (официальный MCP Registry застревал на 2.1.7 полтора месяца). При каждом релизе прогнать вручную:
 
 ## 1. Bump + commit + tag
-- Единый bump: `index.js` (шапка + `VERSION`), `package.json`, `server.json` (все вхождения), `glama.json`, **`smithery.yaml`** (застревал на 2.5.7!), README-бейдж (npm-бейдж динамический — ок). На сайте: `comparestack-remaster/src/lib/constants.js` → `MCP_VERSION` (тянут /mcp, /mcp/docs, /open-data, llms-full, админ-чип).
+- Единый bump: `index.js` (шапка + `VERSION`), `package.json`, `server.json` (все вхождения), `glama.json`, **`smithery.yaml`** (застревал на 2.5.7!), **`mcp.json`** (кормит cursor.directory-скан, тоже застревал на 2.5.7!), README-бейдж (npm-бейдж динамический — ок). На сайте: `comparestack-remaster/src/lib/constants.js` → `MCP_VERSION` (тянут /mcp, /mcp/docs, /open-data, llms-full, админ-чип).
 - `node --check index.js` + stdio-смоук (initialize → tools/list → пара tools/call).
 - Commit автором imkemit-ops, `git tag vX.Y.Z`.
 
