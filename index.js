@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.7.0
+ * ComparEdge MCP Server v2.7.1
  * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
  * Data source: comparedge.com (494 products, live)
@@ -108,7 +108,7 @@ const SCHEMAS = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const VERSION = '2.7.0';
+const VERSION = '2.7.1';
 
 const TOOLS_JSON   = 'https://comparedge.com/llms-tools.json';
 const PRICING_JSON = 'https://comparedge.com/llms-pricing.json';

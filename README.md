@@ -1,15 +1,16 @@
 # ComparEdge MCP Server
 
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
-[![GitHub Marketplace](https://img.shields.io/badge/GitHub_Marketplace-ComparEdge-2088FF?logo=github)](https://github.com/marketplace/comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.7.0-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![dependencies](https://img.shields.io/badge/dependencies-0-2ea043)
 
-A zero-dependency [Model Context Protocol server](https://modelcontextprotocol.io) providing verified pricing, alternatives, and feature comparisons for 494+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
+Your assistant already knows what Notion is. It does not know that Notion Plus costs $12 a seat this month, or that the tool you are evaluating quietly dropped its free plan in spring. Training data ages; prices move. This server closes that gap with verified pricing, plans, ratings and alternatives for 494 SaaS and AI tools, checked against vendor pages before they ship. Live docs and examples: [comparedge.com/mcp](https://comparedge.com/mcp).
 
-## Installation
+Zero dependencies, no API key, no account. Works in Claude Desktop, Cursor, VS Code and any other MCP client.
 
-Add to your MCP client configuration:
+## Install
+
+Add one block to your client config:
 
 ```json
 {
@@ -22,156 +23,54 @@ Add to your MCP client configuration:
 }
 ```
 
-**Claude Desktop:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Cursor:** Settings > MCP > Add Server  
-**VS Code + GitHub Copilot:** `.vscode/mcp.json`
+Claude Desktop keeps this file at `~/Library/Application Support/Claude/claude_desktop_config.json`. Cursor: Settings, then MCP, then Add Server. VS Code with Copilot reads `.vscode/mcp.json`. Per-client walkthroughs live in the [setup guide](https://comparedge.com/mcp/docs).
 
-Full setup guides: [ComparEdge MCP Server — setup and tool reference](https://comparedge.com/mcp/docs)
+## What you can ask
+
+Once connected, questions like these stop producing guesses and start producing verified numbers:
+
+- How much does Slack cost for a team of 40 on annual billing?
+- Find me a CRM under $20 per user that still has a real free plan.
+- I want to leave Salesforce. What do people switch to, and what does the move cost?
+- Which AI coding assistants are top rated right now?
+- Compare Notion and Coda plan by plan.
 
 ## Tools
 
-### `search_tools`
-Search 494+ software products by name, keyword, category, or natural language query.
+Eight tools, each a read-only lookup against the catalog.
 
-```
-query    string  required  Search query (product name, keyword, or use case)
-limit    number  optional  Max results to return (default: 5, max: 20)
-```
+| Tool | Returns | Params |
+|---|---|---|
+| `search_tools` | products matching a name, keyword or use case | `query`, `limit?` |
+| `get_tool` | full profile for one product | `slug` |
+| `get_pricing` | every plan with price, period and features, plus trial and free-plan status | `slug` |
+| `compare_tools` | two products side by side: pricing, features, ratings | `tool1`, `tool2` |
+| `get_alternatives` | top alternatives in the same category, ranked by rating | `slug`, `limit?` |
+| `list_category` | all tools in one category with a pricing overview | `category`, `sort_by?`, `free_only?` |
+| `get_leaderboard` | top-rated tools, one category or overall | `category?`, `limit?` |
+| `list_categories` | all 44 category slugs with display names | none |
 
-**Example prompts:**
-- *"Find the best CRM for startups"*
-- *"What project management tools have a free plan?"*
-- *"Show me AI writing tools"*
-
----
-
-### `get_tool`
-Retrieve the full profile for a specific tool by its slug identifier.
-
-```
-slug    string  required  URL-safe product identifier (e.g., "notion", "github-copilot")
-```
-
-**Example prompts:**
-- *"Tell me about Linear"*
-- *"Give me an overview of HubSpot"*
-- *"What does Figma do?"*
-
----
-
-### `get_pricing`
-Complete verified pricing breakdown: all plans, prices, features per tier, trial status, and free plan availability. Includes per-token pricing for LLM/AI tools.
-
-```
-slug    string  required  Product slug. Use search_tools first if unsure of the exact slug.
-```
-
-**Example prompts:**
-- *"How much does Notion cost per user?"*
-- *"Does Slack have a free plan?"*
-- *"What is the cheapest project management tool under $10/month?"*
-- *"Show me OpenAI API pricing per million tokens"*
-
----
-
-### `compare_tools`
-Side-by-side structured comparison of two software products: pricing, features, ratings, and key differences.
-
-```
-tool1    string  required  Slug of the first product
-tool2    string  required  Slug of the second product
-```
-
-**Example prompts:**
-- *"Compare Notion vs Coda"*
-- *"Notion vs Obsidian: which is better for a team?"*
-- *"Compare Salesforce and HubSpot pricing"*
-
----
-
-### `get_alternatives`
-Top verified alternatives to a given tool within the same category, sorted by aggregated rating. Each result includes a direct comparison link to the ComparEdge side-by-side page.
-
-```
-slug     string  required  Slug of the reference product
-limit    number  optional  Number of alternatives to return (default: 5, max: 10)
-```
-
-**Example prompts:**
-- *"What are the best alternatives to Salesforce under $50/user/mo?"*
-- *"I want to switch from Slack, what else is there?"*
-- *"Find open-source alternatives to Notion"*
-
----
-
-### `list_category`
-Browse all tools in a specific category with pricing overview. Supports sorting and free-only filtering.
-
-```
-category    string   required  Category slug (e.g., "crm", "llm", "ai-coding")
-sort_by     string   optional  "rating" (default) or "startingPrice"
-free_only   boolean  optional  Return only tools with a free plan (default: false)
-```
-
-**Example prompts:**
-- *"Show me all password managers"*
-- *"List CRM tools sorted by price"*
-- *"What are the top-rated LLMs with a free tier?"*
-
-Every category slug maps to a public hub page, e.g. https://comparedge.com/best/llm or https://comparedge.com/best/ai-coding. Useful when a human wants to browse what the model just listed.
-
----
-
-### `get_leaderboard`
-Top-rated software tools by category, ranked by aggregated G2 and Capterra scores.
-
-```
-category    string  optional  Category slug, or "all" for overall leaderboard (default: "all")
-limit       number  optional  Number of tools to return (default: 10, max: 50)
-```
-
-**Example prompts:**
-- *"Show me the top-rated password managers"*
-- *"What are the highest-rated AI coding tools?"*
-- *"Overall top 20 SaaS tools by rating"*
-
----
-
-### `list_categories`
-List all 44 supported software categories with their slugs and display names.
-
-**Example prompts:**
-- *"What categories does ComparEdge cover?"*
-- *"Show me all available software categories"*
+Products are addressed by slug: `notion`, `github-copilot`, `screaming-frog`. When in doubt, `search_tools` first. Category slugs double as public pages a human can open, for example the [LLM category hub](https://comparedge.com/best/llm). LLM entries carry per-token API pricing on top of the plan data.
 
 ## Prompts
 
-The server ships four MCP prompts: pre-built workflows a client can expose as slash commands:
+Four workflows ship as prompts your client can expose as slash commands:
 
-| Prompt | Arguments | What it does |
+| Prompt | Args | What it runs |
 |---|---|---|
-| `find_best_tool` | `use_case` | Searches the catalog for a use case, prices the top matches, returns a ranked pick |
-| `compare_pricing` | `tool_a`, `tool_b` | Runs a plan-by-plan price comparison of two tools |
-| `evaluate_tool` | `tool` | Full evaluation: profile, verified pricing, top alternatives |
-| `category_overview` | `category` | Leaderboard of a category with pricing for the top entries |
+| `find_best_tool` | `use_case` | searches the catalog, prices the top matches, returns a ranked pick |
+| `compare_pricing` | `tool_a`, `tool_b` | plan-by-plan price comparison |
+| `evaluate_tool` | `tool` | profile, verified pricing and top alternatives in one pass |
+| `category_overview` | `category` | category leaderboard with pricing for the leaders |
 
-## Supported Categories
+## Supported categories
 
 `accounting` `ai-agents` `ai-assistants` `ai-coding` `ai-image` `ai-meeting` `ai-productivity` `ai-security` `ai-video` `ai-voice` `ai-writing` `analytics` `cloud-hosting` `cloud-security` `compliance` `crm` `crypto-analytics` `crypto-exchanges` `crypto-portfolio-trackers` `crypto-tax` `crypto-telegram-bots` `crypto-trading-bots` `crypto-wallets` `customer-support` `data-observability` `databases` `defi-tools` `design-tools` `dex` `email-marketing` `endpoint-security` `erp` `finops` `hr-tools` `iam` `llm` `password-managers` `payments` `project-management` `seo-tools` `vector-databases` `video-conferencing` `vpn` `website-builders`
 
-## Data
+## Where the data comes from
 
-Pricing and feature data is sourced directly from vendor pricing pages, verified against live sources, and updated continuously via an automated pipeline. Coverage spans SaaS, AI tools, security software, databases, and developer infrastructure. Each product record includes pricing plans, feature matrices, aggregated ratings from G2 and Capterra, free plan status, and trial availability.
-
-| | |
-|---|---|
-| **Documentation** | [ComparEdge MCP Server — setup and tool reference](https://comparedge.com/mcp/docs) |
-| **Open Dataset** | [494+ SaaS tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
-| **Data Methodology** | [How ComparEdge verifies pricing and feature data](https://comparedge.com/methodology) |
-| **Token Cost Calculator** | [LLM token cost calculator on ComparEdge](https://comparedge.com/llm-calculator) |
-| **Alternatives Hub** | [Verified alternatives for 494+ SaaS tools](https://comparedge.com/alternatives) |
-| **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
+The catalog is maintained by [ComparEdge](https://comparedge.com). Every price traces to the vendor's own pricing page, harvested from the live DOM and re-verified on a rolling schedule; each record carries its verification date. The pipeline is documented in the [methodology](https://comparedge.com/methodology), and the full catalog ships as an [open dataset](https://comparedge.com/open-data) under CC BY 4.0. If a tool is not a fit, the [alternatives hub](https://comparedge.com/alternatives) covers switch paths for the whole catalog.
 
 ## License
 
-MIT: [ComparEdge MCP Server source code on GitHub](https://github.com/comparedge/mcp-server-comparedge)
+MIT. Built on the [Model Context Protocol](https://modelcontextprotocol.io).

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.7.1 (2026-07-10)
+
+- README rewritten from scratch. The first link now points to the ComparEdge MCP hub instead of the protocol spec, every anchor is short plain text instead of naked URLs and ten-word title strings, the dead Compare Hub link is gone, and the resources table that held it was replaced by prose sections. No functional changes to the server itself.
+
 ## 2.7.0 (2026-07-10)
 
 - Data fetches now send a proper `User-Agent: comparedge-mcp/<version>` header. Previously they went out as bare `node`, which generic bot filtering at the CDN edge blocked for several days in July 2026; identified requests also make server-side debugging possible.
