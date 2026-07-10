@@ -1,5 +1,11 @@
 # ComparEdge MCP Server
 
+<div align="center">
+
+![comparedge: verified SaaS pricing for AI assistants](assets/banner.svg)
+
+</div>
+
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![smithery](https://smithery.ai/badge/imkemit/comparedge)](https://smithery.ai/servers/imkemit/comparedge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
