@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub_Marketplace-ComparEdge-2088FF?logo=github)](https://github.com/marketplace/comparedge)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.6.0-7c3aed)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v2.7.0-7c3aed)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A zero-dependency [Model Context Protocol server](https://modelcontextprotocol.io) providing verified pricing, alternatives, and feature comparisons for 494+ SaaS and AI tools. Compatible with Claude Desktop, Cursor, VS Code, and any MCP-compatible client. No API key required.
@@ -89,20 +89,6 @@ tool2    string  required  Slug of the second product
 
 ---
 
-### `compare_pricing`
-Focused pricing analysis of two tools side by side: plan-by-plan cost breakdown with value assessment.
-
-```
-tool1    string  required  Slug of the first product
-tool2    string  required  Slug of the second product
-```
-
-**Example prompts:**
-- *"Which is cheaper, Linear or Jira?"*
-- *"Compare GitHub Copilot vs Cursor pricing"*
-
----
-
 ### `get_alternatives`
 Top verified alternatives to a given tool within the same category, sorted by aggregated rating. Each result includes a direct comparison link to the ComparEdge side-by-side page.
 
@@ -132,6 +118,8 @@ free_only   boolean  optional  Return only tools with a free plan (default: fals
 - *"List CRM tools sorted by price"*
 - *"What are the top-rated LLMs with a free tier?"*
 
+Every category slug maps to a public hub page, e.g. https://comparedge.com/best/llm or https://comparedge.com/best/ai-coding. Useful when a human wants to browse what the model just listed.
+
 ---
 
 ### `get_leaderboard`
@@ -156,6 +144,17 @@ List all 44 supported software categories with their slugs and display names.
 - *"What categories does ComparEdge cover?"*
 - *"Show me all available software categories"*
 
+## Prompts
+
+The server ships four MCP prompts: pre-built workflows a client can expose as slash commands:
+
+| Prompt | Arguments | What it does |
+|---|---|---|
+| `find_best_tool` | `use_case` | Searches the catalog for a use case, prices the top matches, returns a ranked pick |
+| `compare_pricing` | `tool_a`, `tool_b` | Runs a plan-by-plan price comparison of two tools |
+| `evaluate_tool` | `tool` | Full evaluation: profile, verified pricing, top alternatives |
+| `category_overview` | `category` | Leaderboard of a category with pricing for the top entries |
+
 ## Supported Categories
 
 `accounting` `ai-agents` `ai-assistants` `ai-coding` `ai-image` `ai-meeting` `ai-productivity` `ai-security` `ai-video` `ai-voice` `ai-writing` `analytics` `cloud-hosting` `cloud-security` `compliance` `crm` `crypto-analytics` `crypto-exchanges` `crypto-portfolio-trackers` `crypto-tax` `crypto-telegram-bots` `crypto-trading-bots` `crypto-wallets` `customer-support` `data-observability` `databases` `defi-tools` `design-tools` `dex` `email-marketing` `endpoint-security` `erp` `finops` `hr-tools` `iam` `llm` `password-managers` `payments` `project-management` `seo-tools` `vector-databases` `video-conferencing` `vpn` `website-builders`
@@ -169,6 +168,7 @@ Pricing and feature data is sourced directly from vendor pricing pages, verified
 | **Documentation** | [ComparEdge MCP Server — setup and tool reference](https://comparedge.com/mcp/docs) |
 | **Open Dataset** | [494+ SaaS tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
 | **Data Methodology** | [How ComparEdge verifies pricing and feature data](https://comparedge.com/methodology) |
+| **Token Cost Calculator** | [LLM token cost calculator on ComparEdge](https://comparedge.com/llm-calculator) |
 | **Compare Hub** | [Side-by-side SaaS comparisons — 556 curated pairs](https://comparedge.com/compare) |
 | **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
 

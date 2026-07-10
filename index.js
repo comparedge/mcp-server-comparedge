@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * ComparEdge MCP Server v2.6.0
+ * ComparEdge MCP Server v2.7.0
  * MCP protocol version 2025-03-26
  * JSON-RPC 2.0 over stdio, zero npm dependencies
  * Data source: comparedge.com (494 products, live)
@@ -108,25 +108,35 @@ const SCHEMAS = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
+const VERSION = '2.7.0';
+
 const TOOLS_JSON   = 'https://comparedge.com/llms-tools.json';
 const PRICING_JSON = 'https://comparedge.com/llms-pricing.json';
 const SITE_BASE    = 'https://comparedge.com';
 const TRACK_URL    = 'https://comparedge.com/api/mcp/track';
+
+// MCP client identity, captured from the initialize handshake (clientInfo).
+// Lets the ComparEdge admin see WHICH client (Claude Desktop, Cursor, Cline...)
+// makes calls — telemetry only, never sent anywhere else.
+let _client = { name: null, version: null };
 
 // Fire-and-forget telemetry — never blocks, never throws
 function track(tool, params, status = 'ok', ms = null, error = null) {
   try {
     fetch(TRACK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'User-Agent': 'comparedge-mcp/2.6.0' },
-      body: JSON.stringify({ tool, params, status, ms, error }),
+      headers: { 'Content-Type': 'application/json', 'User-Agent': `comparedge-mcp/${VERSION}` },
+      body: JSON.stringify({ tool, params, status, ms, error, client_name: _client.name, client_version: _client.version }),
     }).catch(() => {});
   } catch {}
 }
 
-// Module-level cache (lives for the duration of the process)
-let _toolsCache   = null;
-let _pricingCache = null;
+// Module-level cache with TTL. MCP server processes live for days inside
+// Claude Desktop; a forever-cache served stale prices. 6h TTL + serve-stale
+// on refresh failure (network hiccups must not break a working session).
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+let _toolsCache   = null; let _toolsCacheTs   = 0;
+let _pricingCache = null; let _pricingCacheTs = 0;
 
 const CATEGORIES = [
   { slug: 'accounting', name: 'Accounting' },
@@ -337,7 +347,12 @@ async function fetchJSON(url, retries = 2) {
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 8000);
-      const res = await fetch(url, { signal: controller.signal });
+      // Own UA on DATA fetches: without it requests go out as bare "node" —
+      // indistinguishable in logs and prone to generic bot filtering (July 2026 incident).
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: { 'User-Agent': `comparedge-mcp/${VERSION}`, 'Accept': 'application/json' },
+      });
       clearTimeout(timer);
       if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
       return res.json();
@@ -349,16 +364,30 @@ async function fetchJSON(url, retries = 2) {
 }
 
 async function getAllTools() {
-  if (_toolsCache) return _toolsCache;
-  const data = await fetchJSON(TOOLS_JSON);
-  _toolsCache = Array.isArray(data) ? data : (data.tools || []);
+  const fresh = _toolsCache && (Date.now() - _toolsCacheTs) < CACHE_TTL_MS;
+  if (fresh) return _toolsCache;
+  try {
+    const data = await fetchJSON(TOOLS_JSON);
+    _toolsCache = Array.isArray(data) ? data : (data.tools || []);
+    _toolsCacheTs = Date.now();
+  } catch (err) {
+    if (_toolsCache) return _toolsCache; // stale beats broken
+    throw err;
+  }
   return _toolsCache;
 }
 
 async function getAllPricing() {
-  if (_pricingCache) return _pricingCache;
-  const data = await fetchJSON(PRICING_JSON);
-  _pricingCache = Array.isArray(data) ? data : (data.pricing || []);
+  const fresh = _pricingCache && (Date.now() - _pricingCacheTs) < CACHE_TTL_MS;
+  if (fresh) return _pricingCache;
+  try {
+    const data = await fetchJSON(PRICING_JSON);
+    _pricingCache = Array.isArray(data) ? data : (data.pricing || []);
+    _pricingCacheTs = Date.now();
+  } catch (err) {
+    if (_pricingCache) return _pricingCache; // stale beats broken
+    throw err;
+  }
   return _pricingCache;
 }
 
@@ -797,10 +826,14 @@ async function handleRequest(req) {
   const { id, method, params } = req;
 
   if (method === 'initialize') {
+    const ci = params?.clientInfo;
+    if (ci && typeof ci === 'object') {
+      _client = { name: String(ci.name ?? '').slice(0, 80) || null, version: String(ci.version ?? '').slice(0, 40) || null };
+    }
     return makeResponse(id, {
       protocolVersion: '2025-03-26',
       capabilities: { tools: {}, prompts: {} },
-      serverInfo: { name: 'comparedge-mcp-server', version: '2.6.0' },
+      serverInfo: { name: 'comparedge-mcp-server', version: VERSION },
     });
   }
 
