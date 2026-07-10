@@ -169,7 +169,7 @@ Pricing and feature data is sourced directly from vendor pricing pages, verified
 | **Open Dataset** | [494+ SaaS tools open dataset on ComparEdge](https://comparedge.com/open-data) (CC BY 4.0) |
 | **Data Methodology** | [How ComparEdge verifies pricing and feature data](https://comparedge.com/methodology) |
 | **Token Cost Calculator** | [LLM token cost calculator on ComparEdge](https://comparedge.com/llm-calculator) |
-| **Compare Hub** | [Side-by-side SaaS comparisons — 556 curated pairs](https://comparedge.com/compare) |
+| **Alternatives Hub** | [Verified alternatives for 494+ SaaS tools](https://comparedge.com/alternatives) |
 | **MCP Protocol Specification** | [Model Context Protocol official specification](https://modelcontextprotocol.io) |
 
 ## License
