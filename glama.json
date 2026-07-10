@@ -4,7 +4,7 @@
     "imkemit-ops"
   ],
   "name": "mcp-server-comparedge",
-  "description": "Query verified pricing, independently aggregated ratings, feature comparisons, and category leaderboards for 494+ SaaS, AI, and security tools across 44 categories. Includes 556 curated side-by-side comparisons. Zero dependencies, no API key required.",
+  "description": "Verified pricing, plans, ratings and alternatives for 494 SaaS and AI tools across 44 categories. Every price traces to the vendor's own pricing page and carries its verification date. Zero dependencies, no API key.",
   "version": "2.7.1",
   "license": "MIT",
   "homepage": "https://comparedge.com/mcp",
