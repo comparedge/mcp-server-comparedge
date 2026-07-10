@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![comparedge: verified SaaS pricing for AI assistants](assets/banner.svg)
+![comparedge: verified SaaS pricing for AI assistants](https://raw.githubusercontent.com/comparedge/mcp-server-comparedge/main/assets/banner.svg)
 
 </div>
 
