@@ -7,7 +7,7 @@
 </div>
 
 [![npm version](https://img.shields.io/npm/v/@comparedge/mcp-server.svg)](https://www.npmjs.com/package/@comparedge/mcp-server)
-[![smithery](https://smithery.ai/badge/imkemit/comparedge)](https://smithery.ai/servers/imkemit/comparedge)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.imkemit-ops/comparedge-mcp)](https://lightnow.ai/servers/io.github.imkemit-ops/comparedge-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![dependencies](https://img.shields.io/badge/dependencies-0-2ea043)
 
